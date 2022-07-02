@@ -3,5 +3,5 @@ class Ticket< ApplicationRecord
   belongs_to :worker
   validates :title,  length: {maximum: 40}
   validates :worker_id, presence: true
-  validates :state, inclusion: { in: STATE, message: "invalid: value" }
+  validates :state, inclusion: { in: STATE, message: "invalid: state value" }
 end
