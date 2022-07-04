@@ -1,7 +1,8 @@
 class TicketsController < ApplicationController
 
+
   def index
-    render json: Ticket.all
+    render json: TicketBlueprint.render(Ticket.all)
   end
 
   def create
@@ -31,6 +32,6 @@ class TicketsController < ApplicationController
   private
 
   def ticket_params
-    params.require(:ticket).permit(:title, :worker_id, :description, :state)
+    params.require(:data).permit(:title, :worker_id, :description, :state)
   end
 end
