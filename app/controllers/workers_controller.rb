@@ -33,7 +33,7 @@ class WorkersController < ApplicationController
     if worker.active
       render json: "#{worker.first_name} #{worker.last_name} already active"
     else
-      worker.active = true
+      worker.update(active: true)
       render json: "#{worker.first_name} #{worker.last_name} activated"
     end
   end
@@ -54,7 +54,7 @@ class WorkersController < ApplicationController
     if flag
       render json: "#{worker.first_name} #{worker.last_name} has not finished tickets"
     else
-      worker.active = false
+      worker.update_column(:active, false)
       render json: "#{worker.first_name} #{worker.last_name} deactivated"
     end
   end
