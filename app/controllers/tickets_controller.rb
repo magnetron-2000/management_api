@@ -1,54 +1,63 @@
 class TicketsController < ApplicationController
-
+  before_action :find, except: [:index, :create]
 
   def index # list all tickets
     render json: TicketBlueprint.render(Ticket.all)
   end
 
   def create
-    ticket = Ticket.new(ticket_params)
-    save(ticket)
+    ticket = Ticket.new(create_params)
+    if ticket.save
+      render json: ticket, status: :created
+    else
+      render json: {errors: ticket.errors.full_messages}, status: :expectation_failed
+    end
   end
 
   def show
-    render json: TicketBlueprint.render(Ticket.find(params[:id]))
+    render json: TicketBlueprint.render(@ticket)
   end
 
   def update
-    ticket = Ticket.find(params[:id])
-    ticket.update(title: params[:title], description: params[:description])
-    save(ticket)
+    if @ticket.update(update_params)
+      render json: TicketBlueprint.render(@ticket)
+    else
+      render json: {errors: @ticket.errors.full_messages}, status: :bad_request
+    end
   end
 
   def destroy
-    ticket = Ticket.find(params[:id])
-    ticket.destroy
-    render json: "#{ticket.title} deleted"
+    @ticket.destroy
+    render json: "#{@ticket.title} deleted"
   end
 
   def state # change ticket state
-    ticket = Ticket.find(params[:id])
-    ticket.update(state: params[:state])
-    save(ticket)
+    if @ticket.update(state: params[:state])
+      render json: TicketBlueprint.render(@ticket)
+    else
+      render json: {errors: @ticket.errors.full_messages}
+    end
   end
 
   def change_worker # change ticket worker
-    ticket = Ticket.find(params[:id])
-    ticket.update(worker_id: params[:worker_id])
-    save(ticket)
+    if @ticket.update(worker_id: params[:worker_id])
+      render json: TicketBlueprint.render(@ticket)
+    else
+      render json: {errors: @ticket.errors.full_messages}
+    end
   end
 
   private
 
-    def save(ticket)
-      if ticket.save
-        render json: ticket, status: :created
-      else
-        render json: ticket.errors, status: :expectation_failed
-      end
-    end
+  def find
+    @ticket = Ticket.find(params[:id])
+  end
 
-    def ticket_params
-      params.require(:data).permit(:title, :worker_id, :description, :state)
-    end
+  def create_params
+    params.require(:data).permit(:title, :worker_id, :description, :state)
+  end
+
+  def update_params
+    params.require(:data).permit(:title, :description)
+  end
 end

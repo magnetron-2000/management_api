@@ -30,7 +30,7 @@ RSpec.describe WorkersController do
         body = JSON.parse(response.body)
         expect(body).to eq(
                           [{
-                            "worker_name"=> " #{worker.first_name} #{worker.last_name}",
+                            "name"=> " #{worker.first_name} #{worker.last_name}",
                               "age"=> worker.age,
                               "role"=> worker.role,
                             "tickets_count" => tickets_count(worker)

@@ -1,6 +1,6 @@
 class WorkerBlueprint < Blueprinter::Base
   fields :age, :role
-  field :worker_name do |worker,options|
+  field :name do |worker,options|
     " #{worker.first_name} #{worker.last_name}"
   end
 
@@ -17,7 +17,7 @@ class WorkerBlueprint < Blueprinter::Base
   end
 
   view :single do
-    field :tickets_count do |worker,options|
+    field :tickets do |worker,options|
       list = []
       Ticket.all.each do |ticket|
         if worker.id == ticket.worker_id

@@ -1,4 +1,5 @@
 class WorkersController < ApplicationController
+  before_action :find, except: [:index, :create]
 
   def index
     render json: WorkerBlueprint.render(Worker.all, view: :list)
@@ -6,75 +7,55 @@ class WorkersController < ApplicationController
 
   def create
     worker = Worker.new(worker_params)
-    save(worker)
+    if worker.save
+      render json: worker, status: :created
+    else
+      render json: {errors: [worker.errors.full_messages]}, status: :expectation_failed
+    end
   end
 
   def show
-    render json:  WorkerBlueprint.render(find, view: :single)
+    render json:  WorkerBlueprint.render(@worker, view: :single)
   end
 
   def update
-    worker = find
-    worker.update(first_name: params[:first_name],
-                  last_name: params[:last_name],
-                  age: params[:age],
-                  role: params[:role])
-    save(worker)
+    if @worker.update(worker_params)
+      render json: TicketBlueprint.render(@worker)
+    else
+      render json: {errors: [@worker.errors.full_messages]}, status: :bad_request
+    end
   end
 
   def destroy
-    worker = find
-    worker.destroy
-    render json: "#{worker.first_name} #{worker.last_name} deleted"
+    @worker.destroy
+    render json: ["#{@worker.first_name} #{@worker.last_name} deleted"]
   end
 
-  def activate_worker
-    worker = find
-    if worker.active
-      render json: "#{worker.first_name} #{worker.last_name} already active"
+  def activate #TODO  use castom validation validates method
+    if @worker.activate!
+      @worker.update(active: true)
+      render json: ["#{@worker.first_name} #{@worker.last_name} activated"]
     else
-      worker.update(active: true)
-      render json: "#{worker.first_name} #{worker.last_name} activated"
+      render json: {errors: ["#{@worker.first_name} #{@worker.last_name} already activated"]}
     end
   end
 
-  def deactivate_worker
-    worker = find
-    flag = true
-    Ticket.all.each do |ticket|
-      if worker.id == ticket.worker_id
-        if ticket.state.include?("Pending") || ticket.state.include?("In progress")
-          flag = true
-        end
-      else
-        flag = false
-      end
-    end
-
-    if flag
-      render json: "#{worker.first_name} #{worker.last_name} has not finished tickets"
+  def deactivate
+    if @worker.deactivate!
+      render json: ["#{@worker.first_name} #{@worker.last_name} has not finished tickets"]
     else
-      worker.update_column(:active, false)
-      render json: "#{worker.first_name} #{worker.last_name} deactivated"
+      @worker.update(active: false)
+      render json: ["#{@worker.first_name} #{@worker.last_name} deactivated"]
     end
   end
 
   private
 
   def find
-    Worker.find(params[:id])
+    @worker = Worker.find(params[:id])
   end
 
   def worker_params
     params.require(:data).permit(:first_name, :last_name, :age, :role)
   end
-
-  def save(worker)
-    if worker.save
-      render json: worker, status: :created
-    else
-      render json: worker.errors, status: :expectation_failed
-    end
-  end
-
 end

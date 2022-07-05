@@ -8,7 +8,9 @@ RSpec.describe '/workers routes' do
     end
 
     it "to workers#show" do
-      expect(get '/workers/1').to route_to('workers#show')
+      expect(get '/workers/1').to route_to(controller: 'workers',
+                                           action: 'show',
+                                           id: "1")
     end
 
     it "to workers#create" do
@@ -16,11 +18,15 @@ RSpec.describe '/workers routes' do
     end
 
     it "to workers#update" do
-      expect(patch '/workers/1').to route_to('workers#update')
+      expect(patch '/workers/1').to route_to(controller: 'workers',
+                                             action: 'update',
+                                             id: "1")
     end
 
     it "to workers#destroy" do
-      expect(delete '/workers/1').to route_to('workers#destroy')
+      expect(delete '/workers/1').to route_to(controller: 'workers',
+                                              action: 'destroy',
+                                              id: "1")
     end
   end
 end

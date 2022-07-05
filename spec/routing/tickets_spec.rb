@@ -8,7 +8,9 @@ RSpec.describe '/tickets routes' do
     end
 
     it "to ticket#show" do
-      expect(get '/tickets/1').to route_to('tickets#show')
+      expect(get '/tickets/1').to route_to(controller: 'tickets',
+                                           action: 'show',
+                                           id: "1")
     end
 
     it "to tickets#create" do
@@ -16,11 +18,15 @@ RSpec.describe '/tickets routes' do
     end
 
     it "to tickets#update" do
-      expect(patch '/tickets/1').to route_to('tickets#update')
+      expect(patch '/tickets/1').to route_to(controller: 'tickets',
+                                             action: 'update',
+                                             id: "1")
     end
 
     it "to tickets#destroy" do
-      expect(delete '/tickets/1').to route_to('tickets#destroy')
+      expect(delete '/tickets/1').to route_to(controller: 'tickets',
+                                              action: 'destroy',
+                                              id: "1")
     end
   end
 end
