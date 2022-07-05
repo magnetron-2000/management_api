@@ -1,6 +1,5 @@
 require 'rails_helper'
 
-
 RSpec.describe TicketsController do
   describe "#index" do
     let(:worker) {create(:worker)}
@@ -23,8 +22,9 @@ RSpec.describe TicketsController do
                           [{
                              "title" => ticket.title,
                              "description"=> ticket.description,
-                             "worker_id"=> ticket.worker_id,
-                             "state"=> ticket.state
+                             "worker_name"=> " #{ticket.worker.first_name} #{ticket.worker.last_name}" ,
+                             "state"=> ticket.state,
+                             "created_at" => ticket.created_at.strftime("%d/%m/%Y")
                           }]
                         )
       end
