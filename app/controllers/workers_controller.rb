@@ -20,7 +20,7 @@ class WorkersController < ApplicationController
 
   def update
     if @worker.update(worker_params)
-      render json: TicketBlueprint.render(@worker)
+      render json: WorkerBlueprint.render(@worker)
     else
       render json: {errors: [@worker.errors.full_messages]}, status: :bad_request
     end
@@ -50,7 +50,6 @@ class WorkersController < ApplicationController
   end
 
   private
-
   def find
     @worker = Worker.find(params[:id])
   end

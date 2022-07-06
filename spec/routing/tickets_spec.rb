@@ -28,5 +28,17 @@ RSpec.describe '/tickets routes' do
                                               action: 'destroy',
                                               id: "1")
     end
+
+    it "to tickets#state" do
+      expect(patch '/tickets/1/state').to route_to(controller: 'tickets',
+                                                   action: 'state',
+                                                   id: "1")
+    end
+
+    it "to tickets#change_worker" do
+      expect(patch '/tickets/1/change_worker').to route_to(controller: 'tickets',
+                                                   action: 'change_worker',
+                                                   id: "1")
+    end
   end
 end

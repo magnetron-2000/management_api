@@ -28,5 +28,17 @@ RSpec.describe '/workers routes' do
                                               action: 'destroy',
                                               id: "1")
     end
+
+    it "to workers#activate" do
+      expect(patch '/workers/1/activate').to route_to(controller: 'workers',
+                                              action: 'activate',
+                                              id: "1")
+    end
+
+    it "to workers#deactivate" do
+      expect(patch '/workers/1/deactivate').to route_to(controller: 'workers',
+                                              action: 'deactivate',
+                                              id: "1")
+    end
   end
 end
