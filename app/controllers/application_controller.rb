@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
-  before_action :authenticate_user!
-
+  skip_before_action :verify_authenticity_token
+  # def current_user
+  #   @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  # end
 
   protected
   def get_user_from_token
