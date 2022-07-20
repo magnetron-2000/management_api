@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  post 'sign_up', to: 'users/registrations#create'
   devise_for :users,
              controllers: {
                sessions: 'users/sessions',
