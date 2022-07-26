@@ -2,6 +2,7 @@ class Worker < ApplicationRecord
   validates_with WorkerValidator
   STATE = ["Manager", "Developer", "UI/UX Designer"]
   has_many :tickets
+  belongs_to :user
   validates :last_name, length: {maximum: 20}
   validates :first_name, length: {maximum: 20}
   validates :age, numericality: { greater_than: 15, less_than: 60 }
