@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def register_success(resource)
     worker = Worker.new(params.require(:data).permit(:first_name, :last_name, :age, :role))
 
-    if worker.save(:validate => false)
+    if worker.save(:validate => false) # TODO destroy ignoring validation
       @user = User.last
       @user.worker_id = worker.id
       @user.save
