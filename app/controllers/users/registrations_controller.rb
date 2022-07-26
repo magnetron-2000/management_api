@@ -2,7 +2,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
   def sign_up_params
-
+    params.require(:user).permit(:email, :password, :password_confirmation,
+                                 worker_attributes: [:first_name, :last_name, :age, :role, :active])
   end
   private
 
@@ -13,18 +14,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def register_success
-    setup_worker
+    # Worker.create(sign_up_params[:worker])
     render json: {
       message: 'Signed up sucessfully.',
       user: current_user,
-      worker: worker
+      worker: current_user.worker
     }, status: :ok
   end
 
-  def setup_worker
-    Worker.create!(params.require(:data).permit(:first_name, :last_name, :age, :role, :user_id => current_user))
-  end
   def register_failed
-    render json: { message: 'Something went wrong.', errors: [worker.errors.full_messages] }, status: :unprocessable_entity
+    render json: { message: 'Something went wrong.', errors: [resource.errors.full_messages] }, status: :unprocessable_entity
   end
 end

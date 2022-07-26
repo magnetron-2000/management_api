@@ -18,6 +18,20 @@ RSpec.describe '/registration controllers' do
         expect(User.exists?(email: 'third@mail.com')).to be_truthy
       end
 
+      context "when user and worker exist" do
+        it 'should return true' do
+          post '/users', :params => {  "email" => user.email,
+                                       "password"=> user.encrypted_password,
+                                       "password_confirmation"=> user.encrypted_password,
+                                       "worker_attributes" => ["first_name" => response.first_name,
+                                                               "last_name" => response.last_name,
+                                                               "age" => response.age,
+                                                               "role" => response.role,
+                                                               "active" => response.active] }
+          expect{ user }.to change{ User.count }.by(1).and change{ Worker.count }.by(1)
+        end
+      end
+
     end
 
     context 'when user not exist' do
