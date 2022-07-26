@@ -17,6 +17,7 @@ RSpec.describe '/registration controllers' do
         expect{ user }.to change{ User.count }.by(1)
         expect(User.exists?(email: 'third@mail.com')).to be_truthy
       end
+
     end
 
     context 'when user not exist' do
