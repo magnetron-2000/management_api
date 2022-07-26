@@ -6,14 +6,14 @@ class WorkersController < ApplicationController
     render json: WorkerBlueprint.render(Worker.all, view: :list)
   end
 
-  def create
-    worker = Worker.new(worker_params)
-    if worker.save
-      render json: worker, status: :created
-    else
-      render json: {errors: [worker.errors.full_messages]}, status: :expectation_failed
-    end
-  end
+  # def create
+  #   worker = Worker.new(worker_params)
+  #   if worker.save
+  #     render json: worker, status: :created
+  #   else
+  #     render json: {errors: [worker.errors.full_messages]}, status: :expectation_failed
+  #   end
+  # end
 
   def show
     render json:  WorkerBlueprint.render(@worker, view: :single)
