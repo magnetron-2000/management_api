@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_26_194338) do
+ActiveRecord::Schema.define(version: 2022_07_26_194645) do
 
   create_table "jwt_denylist", force: :cascade do |t|
     t.string "jti", null: false
@@ -46,6 +46,9 @@ ActiveRecord::Schema.define(version: 2022_07_26_194338) do
     t.integer "age"
     t.text "role"
     t.boolean "active", default: true
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_workers_on_user_id"
   end
 
+  add_foreign_key "workers", "users"
 end
