@@ -3,12 +3,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def respond_with(resource, _opts = {})
-    register_success(resource) && return if resource.persisted?
+    register_success && return if resource.persisted?
 
     register_failed
   end
 
-  def register_success(resource)
+  def register_success
     worker = Worker.new(params.require(:data).permit(:first_name, :last_name, :age, :role))
 
     if worker.save(:validate => false) # TODO destroy ignoring validation
