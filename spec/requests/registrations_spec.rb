@@ -18,6 +18,53 @@ RSpec.describe '/registration controllers' do
         expect(User.exists?(email: 'third@mail.com')).to be_truthy
       end
 
+      context 'create with worker' do
+        context 'when worker params valid' do
+          it 'should create user and worker' do
+            expect do
+              post '/users', :params => {
+                user: {
+                  "email"                 => 'test@test.com',
+                  "password"              => 12342,
+                  "password_confirmation" => 12342,
+                },
+                worker:{
+                  last_name:  'a',
+                  first_name: 'v',
+                  age:        20,
+                  role:       'Developer',
+                  active:     true
+                }
+              }
+            end.to change{ User.count }.by(1)
+            expect(JSON.parse(response.body)['worker']).to be_present
+            expect(JSON.parse(response.body)['worker']['user_id']).to eq(JSON.parse(response.body)['user']['id'])
+          end
+        end
+
+        context 'when worker params invalid' do
+          it 'should not create user and worker' do
+            expect do
+              post '/users', :params => {
+                user: {
+                  "email"                 => 'test@test.com',
+                  "password"              => 12342,
+                  "password_confirmation" => 12342,
+                },
+                worker:      {
+                  last_name:  'a',
+                  first_name: 'v',
+                  age:        0,
+                  role:       'Lol',
+                  active:     true
+                }
+              }
+            end.to change{ User.count }.by(0).and change{ Worker.count }.by(0)
+            response
+          end
+        end
+
+      end
     end
 
     context 'when user not exist' do

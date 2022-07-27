@@ -1,30 +1,38 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   respond_to :json
 
-  def sign_up_params
-
+  def user_params
+    params.require(:user).permit(:email, :password, :password_confirmation)
   end
+
+  def worker_params
+    params.require(:worker).permit(:first_name, :last_name, :role, :active, :age)
+  end
+
+  protected
+
+  def build_resource(hash = nil)
+    @user = User.new(user_params)
+    @user.build_worker(worker_params)
+  end
+
   private
 
   def respond_with(resource, _opts = {})
     register_success && return if resource.persisted?
 
-    register_failed
+    register_failed(resource)
   end
 
   def register_success
-    setup_worker
     render json: {
       message: 'Signed up sucessfully.',
       user: current_user,
-      worker: worker
+      worker: current_user.worker
     }, status: :ok
   end
 
-  def setup_worker
-    Worker.create!(params.require(:data).permit(:first_name, :last_name, :age, :role, :user_id => current_user))
-  end
-  def register_failed
-    render json: { message: 'Something went wrong.', errors: [worker.errors.full_messages] }, status: :unprocessable_entity
+  def register_failed(resource)
+    render json: { message: 'Something went wrong.', errors: [resource.errors.full_messages] }, status: :unprocessable_entity
   end
 end
