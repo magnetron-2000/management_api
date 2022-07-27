@@ -19,15 +19,25 @@ RSpec.describe '/registration controllers' do
       end
 
       context "when user and worker exist" do
+        user = {
+            "email": "dfddfdfddsfd@mail.com",
+            "password": "secret",
+            "password_confirmation": "secret",
+            "worker_attributes": {
+              "first_name": "dffdfdfdfdfd",
+              "last_name": "Bradi",
+              "age": 30,
+              "role": "Developer" } }
+
         it 'should return true' do
           post '/users', :params => {  "email" => user.email,
                                        "password"=> user.encrypted_password,
                                        "password_confirmation"=> user.encrypted_password,
-                                       "worker_attributes" => ["first_name" => response.first_name,
-                                                               "last_name" => response.last_name,
-                                                               "age" => response.age,
-                                                               "role" => response.role,
-                                                               "active" => response.active] }
+                                       "worker_attributes" => {"first_name" => user.first_name,
+                                                               "last_name" => user.last_name,
+                                                               "age" => user.age,
+                                                               "role" => user.role,
+                                                               "active" => user.active} }
           expect{ user }.to change{ User.count }.by(1).and change{ Worker.count }.by(1)
         end
       end
