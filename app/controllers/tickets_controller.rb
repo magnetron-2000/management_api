@@ -9,6 +9,7 @@ class TicketsController < ApplicationController
 
   def create
     ticket = Ticket.new(create_params)
+    ticket.creator_worker_id = current_user.worker.id
     if ticket.save
       render json: ticket, status: :created
     else

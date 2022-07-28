@@ -14,7 +14,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def register_success
-    # Worker.create(sign_up_params[:worker])
     render json: {
       message: 'Signed up sucessfully.',
       user: current_user,
