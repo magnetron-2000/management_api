@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_27_134200) do
+ActiveRecord::Schema.define(version: 2022_07_28_115623) do
 
   create_table "jwt_denylist", force: :cascade do |t|
     t.string "jti", null: false
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 2022_07_27_134200) do
     t.integer "worker_id"
     t.text "state"
     t.date "created_at"
+    t.integer "creator_worker_id"
   end
 
   create_table "users", force: :cascade do |t|
