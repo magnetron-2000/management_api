@@ -1,6 +1,7 @@
 class TicketsController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
+  before_action :is_admin?, except: [:index, :show, :create]
 
   def index # list all tickets
     render json: TicketBlueprint.render(Ticket.all)

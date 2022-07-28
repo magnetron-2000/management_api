@@ -4,6 +4,14 @@ class ApplicationController < ActionController::Base
   #   @current_user ||= User.find(session[:user_id]) if session[:user_id]
   # end
 
+  def is_admin?
+    unless current_user.is_admin
+      render json: {message: "you are not admin"}, status: 401
+    end
+  end
+
+
+
   protected
   def get_user_from_token
     jwt_payload = JWT.decode(request.headers['Authorization'].split(' ')[1],

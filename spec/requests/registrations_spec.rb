@@ -35,34 +35,6 @@ RSpec.describe '/registration controllers' do
             expect(JSON.parse(response.body)['worker']).to be_present
             expect(JSON.parse(response.body)['worker']['user_id']).to eq(JSON.parse(response.body)['user']['id'])
           end
-          context 'when params invalid' do
-            it 'should not create a user (invalid user params)' do
-              expect do
-                post '/users', :params => { "user": {
-                  "email": "",
-                  "password": "secret",
-                  "password_confirmation": "secret",
-                  "worker_attributes": {
-                    "first_name": "dffdfdfdfdfd",
-                    "last_name": "Bradi",
-                    "age": 30,
-                    "role": "Developer" } } }
-              end.to change{User.count}.by(1)
-            end
-            it 'should not create a user (invalid worker params)' do
-              expect do
-                post '/users', :params => { "user": {
-                  "email": "dfddfdfddsfd@mail.com",
-                  "password": "secret",
-                  "password_confirmation": "secret",
-                  "worker_attributes": {
-                    "first_name": "",
-                    "last_name": "",
-                    "age": 30,
-                    "role": "Developer" } } }
-              end.to change{User.count}.by(1)
-            end
-          end
         end
       end
 

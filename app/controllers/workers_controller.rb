@@ -1,6 +1,7 @@
 class WorkersController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
+  before_action :is_admin?, except: [:index, :show]
 
   def index
     render json: WorkerBlueprint.render(Worker.all, view: :list)

@@ -71,5 +71,27 @@ RSpec.describe TicketsController do
       expect(response).to have_http_status(:ok)
       end
     end
+
+    context "when user is not admin" do
+      it "create user and invalid deleting ticket" do # TODO finish ticket test
+        post '/users', :params => { "user": {
+          "email": "revhttd@mail.com",
+          "password": "secret",
+          "password_confirmation": "secret",
+          "worker_attributes": {
+            "first_name": "dfghtr",
+            "last_name": "Bradi",
+            "age": 30,
+            "role": "Developer" } } }
+
+        post "/tickets", :params => { :data => {"title" => ticket.title,
+                                                "description"=> ticket.description,
+                                                "worker_id"=> ticket.worker_id,
+                                                "state"=> ticket.state} }, :headers => HEADERS
+
+        delete '/tickets/1'
+          expect(response).to have_http_status(401)
+      end
+    end
   end
 end
