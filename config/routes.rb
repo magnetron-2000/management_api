@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   post 'sign_up', to: 'users/registrations#create'
-  patch 'users/add_admin/:id', to: 'users/admins#add_to_admins'
-  patch 'users/remove_admin/:id', to: 'users/admins#remove_from_admins'
 
+  devise_scope :user do
+    patch 'add_admin/:id', to: 'users/admins#add_to_admins'
+    patch 'remove_admin/:id', to: 'users/admins#remove_from_admins'
+  end
 
   devise_for :users,
              controllers: {

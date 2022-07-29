@@ -1,20 +1,13 @@
 class WorkersController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
-  before_action :is_admin?, except: [:index, :show]
+  before_action :is_admin?, except: [:index, :show, :update]
+  before_action :is_manager?, except: [:index, :show, :update]
+  before_action :check_access?, only: [:update]
 
   def index
     render json: WorkerBlueprint.render(Worker.all, view: :list)
   end
-
-  # def create
-  #   worker = Worker.new(worker_params)
-  #   if worker.save
-  #     render json: worker, status: :created
-  #   else
-  #     render json: {errors: [worker.errors.full_messages]}, status: :expectation_failed
-  #   end
-  # end
 
   def show
     render json:  WorkerBlueprint.render(@worker, view: :single)
@@ -59,4 +52,6 @@ class WorkersController < ApplicationController
   def worker_params
     params.require(:data).permit(:first_name, :last_name, :age, :role)
   end
+
+
 end

@@ -3,7 +3,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def sign_up_params
     params.require(:user).permit(:email, :password, :password_confirmation,
-                                 worker_attributes: [:first_name, :last_name, :age, :role, :active])
+                                 worker_attributes: [:first_name, :last_name, :age, :role, :active]) # TODO how to test
   end
   private
 

@@ -1,16 +1,24 @@
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
-  # def current_user
-  #   @current_user ||= User.find(session[:user_id]) if session[:user_id]
-  # end
 
+  def check_access?
+    if current_user.worker.id != @worker.id
+      unless current_user.is_admin || current_user.worker.role == "Manager"
+        render json: {message: "you have not access"}, status: 401
+      end
+    end
+  end
   def is_admin?
     unless current_user.is_admin
       render json: {message: "you are not admin"}, status: 401
     end
   end
 
-
+  def is_manager?
+    unless current_user.worker.role == "Manager"
+      render json: {message: "you are not manager"}
+    end
+  end
 
   protected
   def get_user_from_token

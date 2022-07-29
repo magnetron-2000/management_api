@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe TicketsController do
   describe "tickets controller" do
     HEADERS = { "ACCEPT" => "application/json" }
-    let(:worker) {create(:worker)}
-    let(:ticket) {create(:ticket, worker:worker)}
+
+    let(:ticket) {create(:ticket)}
 
     it 'index return a success response' do
       get '/tickets'
