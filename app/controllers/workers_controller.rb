@@ -1,9 +1,8 @@
 class WorkersController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
-  before_action :is_admin?, except: [:index, :show, :update]
-  before_action :is_manager?, except: [:index, :show, :update]
-  before_action :check_access?, only: [:update]
+  before_action :is_admin?, only: [:destroy]
+  before_action :check_access?, only: [:update, :activate, :deactivate]
 
   def index
     render json: WorkerBlueprint.render(Worker.all, view: :list)
@@ -14,10 +13,10 @@ class WorkersController < ApplicationController
   end
 
   def update
-    if @worker.update(worker_params)
-      render json: WorkerBlueprint.render(@worker)
+    if is_manager?
+      updating(manager_params)
     else
-      render json: {errors: [@worker.errors.full_messages]}, status: :bad_request
+      updating(worker_params)
     end
   end
 
@@ -50,8 +49,18 @@ class WorkersController < ApplicationController
   end
 
   def worker_params
+    params.require(:data).permit(:first_name, :last_name, :age)
+  end
+
+  def manager_params
     params.require(:data).permit(:first_name, :last_name, :age, :role)
   end
 
-
+  def updating(params)
+    if @worker.update(params)
+      render json: WorkerBlueprint.render(@worker)
+    else
+      render json: {errors: [@worker.errors.full_messages]}, status: :bad_request
+    end
+  end
 end
