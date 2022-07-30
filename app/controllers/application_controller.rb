@@ -7,11 +7,23 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def check_access?
-    if current_user.worker.id != @worker.id
-      unless current_user.is_admin || current_user.worker.role == "Manager"
-        render json: {message: "you have not access, you are not admin or manager"}, status: 401
-      end
+  def check_access_worker?
+    check_access? @worker.id
+  end
+
+  def check_access_ticket?
+    check_access? @ticket.creator_worker_id
+  end
+
+  def check_access?(table)
+    if current_user.worker.id != table
+      check_is_not_admin_or_manager?
+    end
+  end
+
+  def check_is_not_admin_or_manager?
+    unless current_user.is_admin || current_user.worker.role == "Manager"
+      render json: {message: "you have not access, you are not admin or manager"}, status: 401
     end
   end
 

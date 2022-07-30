@@ -1,8 +1,7 @@
 class TicketsController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
-  before_action :is_admin?, except: [:index, :show, :create]
-
+  before_action :check_access_ticket?, except: [:index, :show, :create, :state]
   def index # list all tickets
     render json: TicketBlueprint.render(Ticket.all)
   end
@@ -30,15 +29,23 @@ class TicketsController < ApplicationController
   end
 
   def destroy
-    @ticket.destroy
-    render json: "#{@ticket.title} deleted"
+    unless check_is_not_admin_or_manager?
+      @ticket.destroy
+      render json: "#{@ticket.title} deleted"
+    end
   end
 
   def state # change ticket state
-    if @ticket.update(state: params[:state])
-      render json: TicketBlueprint.render(@ticket)
-    else
-      render json: {errors: @ticket.errors.full_messages}
+    unless current_user.is_admin || current_user.worker.role == "Manager"
+      if current_user.worker.id == @ticket.worker_id
+        if @ticket.update(state: params[:state])
+          render json: TicketBlueprint.render(@ticket)
+        else
+          render json: {errors: @ticket.errors.full_messages}
+        end
+      else
+        render json: {message: "you have not access!"}, status: 401
+      end
     end
   end
 
