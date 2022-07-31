@@ -68,3 +68,6 @@ class WorkersController < ApplicationController
     end
   end
 end
+
+
+#TODO Deactivated workers can't get access to endpoints (acts like "guests") , Change User "is_admin"	Only Manager can be set as admin
