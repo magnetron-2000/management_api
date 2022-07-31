@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   skip_before_action :verify_authenticity_token
 
+
   def is_admin?
     unless current_user.is_admin
       render json: {message: "you are not admin"}, status: 401
@@ -39,5 +40,13 @@ class ApplicationController < ActionController::Base
                              Rails.application.credentials.devise[:jwt_secret_key]).first
     user_id = jwt_payload['sub']
     User.find(user_id.to_s)
+  end
+
+  private
+
+  def is_active?
+    unless current_user.worker.active
+      render json: {error: "deactivated workers can't get access!"}
+    end
   end
 end

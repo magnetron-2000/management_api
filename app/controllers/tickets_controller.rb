@@ -1,6 +1,7 @@
 class TicketsController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
+  before_action :is_active?
   before_action :check_access_ticket?, except: [:index, :show, :create, :state]
   def index # list all tickets
     render json: TicketBlueprint.render(Ticket.all)

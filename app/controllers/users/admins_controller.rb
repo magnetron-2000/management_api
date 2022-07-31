@@ -1,6 +1,7 @@
 class Users::AdminsController < Devise::RegistrationsController
   before_action :find
   before_action :authenticate_user!
+  before_action :is_active?
   before_action :is_admin?
   before_action :is_user_manager?, only: [:add_to_admins]
   def add_to_admins

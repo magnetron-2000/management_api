@@ -1,6 +1,7 @@
 class WorkersController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
+  before_action :is_active?
   before_action :is_admin?, only: [:destroy]
   before_action :check_access_worker?, only: [:update, :activate, :deactivate]
 
@@ -68,6 +69,3 @@ class WorkersController < ApplicationController
     end
   end
 end
-
-
-#TODO Deactivated workers can't get access to endpoints (acts like "guests") , Change User "is_admin"	Only Manager can be set as admin
