@@ -79,5 +79,23 @@ RSpec.describe WorkersController do
         expect(response).to have_http_status(:ok)
       end
     end
+
+    context "when user is not admin" do
+      it "create user and invalid deleting worker" do
+          post '/users', :params => { "user": {
+            "email": "dfddfdfddsfd@mail.com",
+            "password": "secret",
+            "password_confirmation": "secret",
+            "worker_attributes": {
+              "first_name": "dffdfdfdfdfd",
+              "last_name": "Bradi",
+              "age": 30,
+              "role": "Developer" } } }
+        delete '/workers/1'
+        aggregate_failures do
+          expect(response).to have_http_status(401)
+        end
+      end
+    end
   end
 end
