@@ -7,4 +7,24 @@ class User < ApplicationRecord
          jwt_revocation_strategy: JwtDenylist
   #self.skip_session_storage = [:http_auth, :params_auth]
   accepts_nested_attributes_for :worker
+
+
+  def check_admin
+    is_admin
+  end
+
+  def adding
+    self.is_admin = true
+  end
+
+  def removing
+    self.is_admin = false
+  end
+  def saving
+    save
+  end
+
+  def check_manager
+    self.worker.role == "Manager"
+  end
 end

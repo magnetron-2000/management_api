@@ -1,15 +1,15 @@
 class Users::AdminsController < Devise::RegistrationsController
-  before_action :find
+  before_action :set_user
   before_action :authenticate_user!
   before_action :is_active?
   before_action :is_admin?
   before_action :is_user_manager?, only: [:add_to_admins]
   def add_to_admins
-    if @user.is_admin == true
+    if @user.check_admin
       render json: {errors: "already admin!"}
     else
-      @user.is_admin = true
-      if @user.save
+      @user.adding
+      if @user.saving
         render json: {message: "#{@user.email} is admin"}
       else
         render json: {errors: "something went wrong"}
@@ -18,11 +18,11 @@ class Users::AdminsController < Devise::RegistrationsController
   end
 
   def remove_from_admins
-    if @user.is_admin == false
+    if not @user.check_admin
       render json: {errors: "already not an admin!"}
     else
-      @user.is_admin = false
-      if @user.save
+      @user.removing
+      if @user.saving
         render json: {message: "#{@user.email} is not admin"}
       else
         render json: {errors: "something went wrong"}
@@ -32,12 +32,12 @@ class Users::AdminsController < Devise::RegistrationsController
 
   private
 
-  def find
+  def set_user
     @user = User.find(params[:id])
   end
 
   def is_user_manager?
-    unless @user.worker.role == "Manager"
+    unless @user.check_manager
       render json: {error: "user is not manager!"}
     end
   end

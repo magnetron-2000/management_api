@@ -29,9 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def is_manager?
-    if current_user.worker.role == "Manager"
-      true
-    end
+    current_user.worker.role == "Manager"
   end
 
   protected

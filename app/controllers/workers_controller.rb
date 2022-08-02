@@ -36,15 +36,15 @@ class WorkersController < ApplicationController
   end
 
   def deactivate
-    unless @worker.user.is_admin
+    if @worker.user.is_admin
+      render json: {errors: "you can not deactivate admins!"}
+    else
       if @worker.deactivate!
         render json: ["#{@worker.first_name} #{@worker.last_name} has not finished tickets"]
       else
         @worker.update(active: false)
         render json: ["#{@worker.first_name} #{@worker.last_name} deactivated"]
       end
-    else
-      render json: {errors: "you can not deactivate admins!"}
     end
   end
 
