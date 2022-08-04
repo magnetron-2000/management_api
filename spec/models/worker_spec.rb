@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Worker, type: :model do
   describe "#validations" do
-    let(:worker) {build(:worker)}
+    let(:user) {build(:user)}
+    let(:worker) {user.worker}
 
     it "invalid test, last name more then 20 s" do
       worker.last_name = 'a' * 22
@@ -35,6 +36,16 @@ RSpec.describe Worker, type: :model do
 
     it 'deactivate! return false' do
       expect(worker.deactivate!).to eq(true)
+    end
+
+    it "should have one user" do
+      t = Worker.reflect_on_association(:user)
+      expect(t.macro).to eq(:belongs_to)
+    end
+
+    it "should have many tickets" do
+      t = Worker.reflect_on_association(:tickets)
+      expect(t.macro).to eq(:has_many)
     end
   end
 end
