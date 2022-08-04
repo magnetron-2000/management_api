@@ -1,18 +1,12 @@
 class WorkersController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
+  before_action :is_active?
+  before_action :is_admin?, only: [:destroy]
+  before_action :check_access_worker?, only: [:update, :activate, :deactivate]
 
   def index
     render json: WorkerBlueprint.render(Worker.all, view: :list)
-  end
-
-  def create
-    worker = Worker.new(worker_params)
-    if worker.save
-      render json: worker, status: :created
-    else
-      render json: {errors: [worker.errors.full_messages]}, status: :expectation_failed
-    end
   end
 
   def show
@@ -20,10 +14,10 @@ class WorkersController < ApplicationController
   end
 
   def update
-    if @worker.update(worker_params)
-      render json: WorkerBlueprint.render(@worker)
+    if is_manager?
+      updating(manager_params)
     else
-      render json: {errors: [@worker.errors.full_messages]}, status: :bad_request
+      updating(worker_params)
     end
   end
 
@@ -42,11 +36,15 @@ class WorkersController < ApplicationController
   end
 
   def deactivate
-    if @worker.deactivate!
-      render json: ["#{@worker.first_name} #{@worker.last_name} has not finished tickets"]
+    if @worker.user.is_admin
+      render json: {errors: "you can not deactivate admins!"}
     else
-      @worker.update(active: false)
-      render json: ["#{@worker.first_name} #{@worker.last_name} deactivated"]
+      if @worker.deactivate!
+        render json: ["#{@worker.first_name} #{@worker.last_name} has not finished tickets"]
+      else
+        @worker.update(active: false)
+        render json: ["#{@worker.first_name} #{@worker.last_name} deactivated"]
+      end
     end
   end
 
@@ -56,6 +54,18 @@ class WorkersController < ApplicationController
   end
 
   def worker_params
+    params.require(:data).permit(:first_name, :last_name, :age)
+  end
+
+  def manager_params
     params.require(:data).permit(:first_name, :last_name, :age, :role)
+  end
+
+  def updating(params)
+    if @worker.update(params)
+      render json: WorkerBlueprint.render(@worker)
+    else
+      render json: {errors: [@worker.errors.full_messages]}, status: :bad_request
+    end
   end
 end
