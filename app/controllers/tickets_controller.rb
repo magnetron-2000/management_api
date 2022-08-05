@@ -37,8 +37,8 @@ class TicketsController < ApplicationController
   end
 
   def state # change ticket state
-    unless current_user.is_admin || current_user.worker.role == "Manager"
-      if current_user.worker.id == @ticket.worker_id
+
+      if current_user.is_admin || current_user.worker.role == "Manager" || current_user.worker.id == @ticket.worker_id
         if @ticket.update(state: params[:state])
           render json: TicketBlueprint.render(@ticket)
         else
@@ -47,7 +47,7 @@ class TicketsController < ApplicationController
       else
         render json: {message: "you have not access!"}, status: 401
       end
-    end
+
   end
 
   def change_worker # change ticket worker

@@ -3,25 +3,29 @@ require 'rails_helper'
 RSpec.describe '/session controllers' do
   describe "#create, delete" do
     context 'post request sign in' do
-
-      let(:user) {create :user}
-
-      before(:each) do
-        post '/users/sign_in', :params => {
-               "email" => user.email,
-               "password"=> user.encrypted_password,
-               "password_confirmation"=> user.encrypted_password
-             }
-      end
-
-      it 'should return 200 http status code' do
+      it 'should return 200 http status code if user sign in' do
+        post '/users/sign_in', :params => { "user": {
+                                            "email": "dfdsddsfd@mail.com",
+                                            "password": "secret",
+                                            "password_confirmation": "secret" }}
         expect(response).to have_http_status(:ok)
+        # expect(JSON.parse(response.body)).to eq({"message"=>"You are signed out."}) #TODO invalid response
       end
 
-      # it 'should return 200 http status code' do
-      #   delete '/users/sign_out'
-      #   expect(response).to have_http_status(:ok)
-      # end
+      it 'should return 200 http status code if user sign out' do
+        post '/users', :params => { "user": {
+          "email": "some@mail.com",
+          "password": "secret",
+          "password_confirmation": "secret",
+          "worker_attributes": {
+            "first_name": "hi",
+            "last_name": "Bradi",
+            "age": 30,
+            "role": "Developer" } } }
+        delete '/users/sign_out'
+        expect(response).to have_http_status(:ok)
+        expect(JSON.parse(response.body)).to eq({"message"=>"You are signed out."})
+      end
     end
   end
 end
