@@ -19,6 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       user: current_user,
       worker: current_user.worker
     }, status: :ok
+    UserMailer.with(user: current_user).welcome_email.deliver_later
   end
 
   def register_failed
