@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Hello, <%= @user.email %></h1>
+<p>
+  Your task has been changed.
+</p>
+<p>
+  Before:
+  <p>
+    title: <%= @old_ticket[:title] %>.
+  </p>
+  <p>
+    description: <%= @old_ticket[:description] %>.
+  </p>
+</p>
+<p>
+  After:
+<p>
+  title: <%= @new_ticket.title %>.
+</p>
+<p>
+  description: <%= @new_ticket.description %>.
+</p>
+</p>
+<p>
+  Editor: <%= @editor.first_name %> <%= @editor.last_name %>.
+</p>
+<p>
+  To see more, just follow this link: <%= @url %>.
+</p>
+<p>Have a great day!</p>
+</body>
+</html>

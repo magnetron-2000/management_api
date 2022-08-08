@@ -22,8 +22,10 @@ class TicketsController < ApplicationController
   end
 
   def update
+    old_ticket = {title: @ticket.title.dup, description: @ticket.description.dup}
     if @ticket.update(update_params)
       render json: TicketBlueprint.render(@ticket)
+      UserMailer.with(user: @ticket.worker.user, editor: current_user.worker, old_ticket: old_ticket, new_ticket: @ticket).task_changed.deliver_later
     else
       render json: {errors: @ticket.errors.full_messages}, status: :bad_request
     end
@@ -53,6 +55,7 @@ class TicketsController < ApplicationController
   def change_worker # change ticket worker
     if @ticket.update(worker_id: params[:worker_id])
       render json: TicketBlueprint.render(@ticket)
+      UserMailer.with(user: @ticket.worker.user, ticket: @ticket).assigned_new_task.deliver_later
     else
       render json: {errors: @ticket.errors.full_messages}
     end
