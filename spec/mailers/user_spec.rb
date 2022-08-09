@@ -1,5 +1,118 @@
 require "rails_helper"
 
 RSpec.describe UserMailer, type: :mailer do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'instructions' do
+    let(:user) { build(:user) }
+    let(:ticket) {build(:ticket)}
+
+
+
+    context "welcome email" do
+      let(:welcome_mail) { UserMailer.with(user: user).welcome_email }
+
+      it 'renders the subject' do
+        expect(welcome_mail.subject).to eql('Welcome to My Awesome Site')
+      end
+
+      it 'renders the receiver email' do
+        expect(welcome_mail.to).to eql([user.email])
+      end
+
+      it 'renders the sender email' do
+        expect(welcome_mail.from).to eql(['danikfox1616@gmail.com'])
+      end
+
+      it 'assigns email' do
+        expect(welcome_mail.body.encoded).to match(user.email)
+      end
+
+      it 'assigns @url' do
+        expect(welcome_mail.body.encoded).to match('http://localhost:3000/users/sign_in')
+      end
+    end
+
+    context "assigned new task" do
+      let(:new_task_mail) { UserMailer.with(user: user, ticket: ticket).assigned_new_task }
+
+      it 'renders the subject' do
+        expect(new_task_mail.subject).to eql('You get new ticket')
+      end
+
+      it 'renders the receiver email' do
+        expect(new_task_mail.to).to eql([user.email])
+      end
+
+      it 'renders the sender email' do
+        expect(new_task_mail.from).to eql(['danikfox1616@gmail.com'])
+      end
+
+      it 'assigns email' do
+        expect(new_task_mail.body.encoded).to match(user.email)
+      end
+
+      it 'assigns title' do
+        expect(new_task_mail.body.encoded).to match(ticket.title)
+      end
+
+      it 'assigns description' do
+        expect(new_task_mail.body.encoded).to match(ticket.description)
+      end
+
+      it 'assigns @url' do
+        expect(new_task_mail.body.encoded).to match("http://localhost:3000/tickets/#{ticket.id}")
+      end
+
+    end
+
+    context "task changed" do
+      let(:old_ticket) { { title: "something", description: "something" } }
+      let(:editor) {build(:worker)}
+      let(:task_changed_mail) { UserMailer.with(user: user, editor: editor , old_ticket: old_ticket, new_ticket: ticket).task_changed }
+
+      it 'renders the subject' do
+        expect(task_changed_mail.subject).to eql('Your ticket has been changed')
+      end
+
+      it 'renders the receiver email' do
+        expect(task_changed_mail.to).to eql([user.email])
+      end
+
+      it 'renders the sender email' do
+        expect(task_changed_mail.from).to eql(['danikfox1616@gmail.com'])
+      end
+
+      it 'assigns email' do
+        expect(task_changed_mail.body.encoded).to match(user.email)
+      end
+
+      it 'assigns new title' do
+        expect(task_changed_mail.body.encoded).to match(ticket.title)
+      end
+
+      it 'assigns new description' do
+        expect(task_changed_mail.body.encoded).to match(ticket.description)
+      end
+
+      it 'assigns old title' do
+        expect(task_changed_mail.body.encoded).to match(old_ticket[:title])
+      end
+
+      it 'assigns old description' do
+        expect(task_changed_mail.body.encoded).to match(old_ticket[:description])
+      end
+
+      it 'assigns editor first name' do
+        expect(task_changed_mail.body.encoded).to match(editor.first_name)
+      end
+
+      it 'assigns editor last name' do
+        expect(task_changed_mail.body.encoded).to match(editor.last_name)
+      end
+
+      it 'assigns @url' do
+        expect(task_changed_mail.body.encoded).to match("http://localhost:3000/tickets/#{ticket.id}")
+      end
+
+    end
+  end
 end

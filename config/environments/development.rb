@@ -71,7 +71,7 @@ Rails.application.configure do
     :address => 'smtp.gmail.com',
     :port => 601,
     :user_name => "danikfox1616@gmail.com",
-    :password => "",  #
+    :password => "",  # ActionMailer::Base.deliveries
     :authentication => 'plain',
     :enable_starttls_auto => true
   }
