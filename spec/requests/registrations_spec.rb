@@ -2,18 +2,21 @@ require 'rails_helper'
 
 RSpec.describe '/registration controllers' do
   describe "#create" do
+    let(:params) { {
+      "user": {
+        "email": "hello@mail.com",
+        "password": "secret",
+        "password_confirmation": "secret",
+        "worker_attributes": {
+          "first_name": "dffdfdfdfdfd",
+          "last_name": "Bradi",
+          "age": 30,
+          "role": "Developer" } } }
+    }
+
     context 'when user exist' do
-      let(:user) {build(:user)}
       it 'should return 201 http status code' do
-        post '/users', :params => { "user": {
-                                    "email": "hello@mail.com",
-                                    "password": "secret",
-                                    "password_confirmation": "secret",
-                                    "worker_attributes": {
-                                      "first_name": "dffdfdfdfdfd",
-                                      "last_name": "Bradi",
-                                      "age": 30,
-                                      "role": "Developer" } } }
+        post '/users', :params => params
         expect(response).to have_http_status(:ok)
         expect(User.exists?(email: 'third@mail.com')).to be_falsey
         expect(User.exists?(email: 'hello@mail.com')).to be_truthy
@@ -23,15 +26,7 @@ RSpec.describe '/registration controllers' do
         context 'when user and worker valid' do
           it 'should return true' do
             expect do
-            post '/users', :params => { "user": {
-                                        "email": "dfddfdfddsfd@mail.com",
-                                        "password": "secret",
-                                        "password_confirmation": "secret",
-                                        "worker_attributes": {
-                                          "first_name": "dffdfdfdfdfd",
-                                          "last_name": "Bradi",
-                                          "age": 30,
-                                          "role": "Developer" } } }
+            post '/users', :params => params
             end.to change{User.count}.by(1)
             expect(JSON.parse(response.body)['worker']).to be_present
             expect(JSON.parse(response.body)['worker']['user_id']).to eq(JSON.parse(response.body)['user']['id'])

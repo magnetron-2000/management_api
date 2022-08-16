@@ -28,4 +28,8 @@ class User < ApplicationRecord
   def check_manager
     self.worker.role == "Manager"
   end
+
+  def mail_after_create
+    UserMailer.with(user: self).welcome_email.deliver_later
+  end
 end

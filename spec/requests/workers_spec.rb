@@ -1,33 +1,27 @@
 require 'rails_helper'
 
-RSpec.describe WorkersController do
+RSpec.describe "/workers controller" do
   describe "worker controller" do
     HEADERS = { "ACCEPT" => "application/json" }
-
-    before do
-      post '/users', :params => { "user": {
-        "email": "dfddfdfddsfd@mail.com",
+    let(:user) {create(:user)}
+    let(:params) {
+      { "user": {
+        "email": "hello@mail.com",
         "password": "secret",
         "password_confirmation": "secret",
         "worker_attributes": {
-          "first_name": "dffdfdfdfdfd",
-          "last_name": "Bradi",
-          "age": 30,
-          "role": "Developer" } } }
-
-      post '/users', :params => { "user": {
-        "email": "fddsda@mail.com",
-        "password": "secret",
-        "password_confirmation": "secret",
-        "worker_attributes": {
-          "first_name": "sdfaw",
+          "first_name": "hello",
           "last_name": "Bradi",
           "age": 30,
           "role": "Manager" } } }
+    }
 
-      user = User.last
-      user.is_admin = true
-      user.save
+    before do
+      post '/users', :params => params
+
+      user2 = User.last
+      user2.is_admin = true
+      user2.save
     end
 
     def tickets_count(worker)
@@ -47,23 +41,23 @@ RSpec.describe WorkersController do
         expect(response).to have_http_status(200)
         expect(body).to eq(
                           [{
-                            "name"=> " dffdfdfdfdfd Bradi",
+                            "name"=> " hello Bradi",
                               "age"=> 30,
-                              "role"=> "Developer",
+                              "role"=> "Manager",
                             "tickets_count" => tickets_count(0)
                           }]
                         )
       end
 
       it 'return a success response show' do
-        get '/workers/1'
+        get "/workers/#{user.id}"
         expect(response).to have_http_status(200)
         body = JSON.parse(response.body)
         expect(body).to eq(
                           {
-                             "name"=> " dffdfdfdfdfd Bradi",
+                             "name"=> " John Doe",
                              "age"=> 30,
-                             "role"=> "Developer",
+                             "role"=> "Manager",
                              "tickets" => []
                            }
                         )

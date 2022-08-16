@@ -4,19 +4,9 @@ RSpec.describe TicketsController do
   describe "tickets controller" do
     HEADERS = { "ACCEPT" => "application/json" }
     let(:ticket) {create(:ticket)}
-
-    before do
-      post '/users', :params => { "user": {
-        "email": "dfddfdfddsfd@mail.com",
-        "password": "secret",
-        "password_confirmation": "secret",
-        "worker_attributes": {
-          "first_name": "dffdfdfdfdfd",
-          "last_name": "Bradi",
-          "age": 30,
-          "role": "Manager" } } }
-
-      post '/users', :params => { "user": {
+    let(:user) {create(:user)}
+    let(:params) {
+      { "user": {
         "email": "fddsda@mail.com",
         "password": "secret",
         "password_confirmation": "secret",
@@ -25,6 +15,10 @@ RSpec.describe TicketsController do
           "last_name": "Bradi",
           "age": 30,
           "role": "Manager" } } }
+    }
+
+    before do
+      post '/users', :params => params
 
       user = User.last
       user.is_admin = true
@@ -68,23 +62,23 @@ RSpec.describe TicketsController do
       end
 
       it 'state return state = true' do
-        patch '/tickets/1/state'
+        patch "/tickets/#{ticket.id}/state"
         expect(response).to have_http_status(200)
       end
 
       it 'state return state = true' do
-        patch '/tickets/1/change_worker'
+        patch "/tickets/#{ticket.id}/change_worker"
         expect(response).to have_http_status(200)
       end
 
 
       it 'show return a success response' do
-        get '/tickets/1'
+        get "/tickets/#{ticket.id}"
         expect(response).to have_http_status(200)
       end
 
       it 'return a success update' do
-        patch "/tickets/1", :params => { :data => {"title" => ticket.title,
+        patch "/tickets/#{ticket.id}", :params => { :data => {"title" => ticket.title,
                                                  "description"=> ticket.description,
                                                  "worker_id"=> ticket.worker_id,
                                                  "state"=> ticket.state} }, :headers => HEADERS
@@ -94,7 +88,7 @@ RSpec.describe TicketsController do
       end
 
       it ' return a success delete' do
-      delete '/tickets/1'
+      delete "/tickets/#{ticket.id}"
       expect(response).to have_http_status(:ok)
       end
     end
