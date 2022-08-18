@@ -18,7 +18,6 @@ RSpec.describe '/registration controllers' do
       it 'should return 201 http status code' do
         post '/users', :params => params
         expect(response).to have_http_status(:ok)
-        expect(User.exists?(email: 'third@mail.com')).to be_falsey
         expect(User.exists?(email: 'hello@mail.com')).to be_truthy
       end
 
@@ -59,6 +58,7 @@ RSpec.describe '/registration controllers' do
             "last_name": "Bradi",
             "age": 30,
             "role": "Developer" } } }
+        expect(JSON.parse(response.body)["message"]).to eq("Something went wrong.")
         expect(JSON.parse(response.body)["errors"]).to eq(["Email can't be blank"])
       end
     end

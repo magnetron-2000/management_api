@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe UserMailer, type: :mailer do
   describe 'instructions' do
-    let(:user) { build(:user) }
-    let(:ticket) {build(:ticket)}
+    let(:user) { create(:user) }
+    let(:ticket) {create(:ticket)}
 
 
 
@@ -65,9 +65,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     context "task changed" do
-      let(:old_ticket) { { title: "something", description: "something" } }
-      let(:editor) {build(:worker)}
-      let(:task_changed_mail) { UserMailer.with(user: user, editor: editor , old_ticket: old_ticket, new_ticket: ticket).task_changed }
+      let(:task_changed_mail) { UserMailer.with(user: user, editor: user.worker , old_ticket: ticket, new_ticket: ticket).task_changed }
 
       it 'renders the subject' do
         expect(task_changed_mail.subject).to eql('Your ticket has been changed')
@@ -94,19 +92,19 @@ RSpec.describe UserMailer, type: :mailer do
       end
 
       it 'assigns old title' do
-        expect(task_changed_mail.body.encoded).to match(old_ticket[:title])
+        expect(task_changed_mail.body.encoded).to match(ticket.title_was)
       end
 
       it 'assigns old description' do
-        expect(task_changed_mail.body.encoded).to match(old_ticket[:description])
+        expect(task_changed_mail.body.encoded).to match(ticket.description_was)
       end
 
       it 'assigns editor first name' do
-        expect(task_changed_mail.body.encoded).to match(editor.first_name)
+        expect(task_changed_mail.body.encoded).to match(user.worker.first_name)
       end
 
       it 'assigns editor last name' do
-        expect(task_changed_mail.body.encoded).to match(editor.last_name)
+        expect(task_changed_mail.body.encoded).to match(user.worker.last_name)
       end
 
       it 'assigns @url' do
