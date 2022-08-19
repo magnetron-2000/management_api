@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       patch :change_worker
       patch :state
     end
+    resources :comments, :except => [:new, :edit]
   end
 
   resources :workers, :except => [:new, :edit] do
