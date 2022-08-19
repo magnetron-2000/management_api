@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Ticket, type: :model do
   describe "#validations" do
-    let(:worker) {build(:worker)}
+    let(:user) {build(:user)}
+    let(:worker) {user.worker}
     let(:ticket) {build(:ticket)}
 
     it "title is more then 40 s" do
@@ -21,5 +22,9 @@ RSpec.describe Ticket, type: :model do
       expect(ticket).not_to be_valid
     end
 
+    it "should have one worker" do
+      t = Ticket.reflect_on_association(:worker)
+      expect(t.macro).to eq(:belongs_to)
+    end
   end
 end

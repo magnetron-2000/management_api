@@ -1,5 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe JwtDenylist, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "#validations" do
+    let(:jwt_denylist) {build(:jwt_denylist)}
+
+    it "should exist" do
+      expect(jwt_denylist).to be_present
+    end
+
+  end
 end

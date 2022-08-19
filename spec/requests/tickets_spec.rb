@@ -3,8 +3,27 @@ require 'rails_helper'
 RSpec.describe TicketsController do
   describe "tickets controller" do
     HEADERS = { "ACCEPT" => "application/json" }
-
     let(:ticket) {create(:ticket)}
+    let(:user) {create(:user)}
+    let(:params) {
+      { "user": {
+        "email": "fddsda@mail.com",
+        "password": "secret",
+        "password_confirmation": "secret",
+        "worker_attributes": {
+          "first_name": "sdfaw",
+          "last_name": "Bradi",
+          "age": 30,
+          "role": "Manager" } } }
+    }
+
+    before do
+      post '/users', :params => params
+
+      user = User.last
+      user.is_admin = true
+      user.save
+    end
 
     it 'index return a success response' do
       get '/tickets'
@@ -35,29 +54,31 @@ RSpec.describe TicketsController do
                              "description"=> ticket.description,
                              "worker_name"=> " #{ticket.worker.first_name} #{ticket.worker.last_name}" ,
                              "state"=> ticket.state,
-                             "created_at" => ticket.created_at.strftime("%d/%m/%Y")
+                             "created_at" => ticket.created_at.strftime("%d/%m/%Y"),
+                             "creator_worker_id" => ticket.creator_worker_id,
+                             "worker_id" => ticket.worker_id
                           }]
                         )
       end
 
       it 'state return state = true' do
-        patch '/tickets/1/state'
+        patch "/tickets/#{ticket.id}/state"
         expect(response).to have_http_status(200)
       end
 
       it 'state return state = true' do
-        patch '/tickets/1/change_worker'
+        patch "/tickets/#{ticket.id}/change_worker"
         expect(response).to have_http_status(200)
       end
 
 
       it 'show return a success response' do
-        get '/tickets/1'
+        get "/tickets/#{ticket.id}"
         expect(response).to have_http_status(200)
       end
 
       it 'return a success update' do
-        patch "/tickets/1", :params => { :data => {"title" => ticket.title,
+        patch "/tickets/#{ticket.id}", :params => { :data => {"title" => ticket.title,
                                                  "description"=> ticket.description,
                                                  "worker_id"=> ticket.worker_id,
                                                  "state"=> ticket.state} }, :headers => HEADERS
@@ -67,30 +88,8 @@ RSpec.describe TicketsController do
       end
 
       it ' return a success delete' do
-      delete '/tickets/1'
+      delete "/tickets/#{ticket.id}"
       expect(response).to have_http_status(:ok)
-      end
-    end
-
-    context "when user is not admin" do
-      it "create user and invalid deleting ticket" do # TODO finish ticket test
-        post '/users', :params => { "user": {
-          "email": "revhttd@mail.com",
-          "password": "secret",
-          "password_confirmation": "secret",
-          "worker_attributes": {
-            "first_name": "dfghtr",
-            "last_name": "Bradi",
-            "age": 30,
-            "role": "Developer" } } }
-
-        post "/tickets", :params => { :data => {"title" => ticket.title,
-                                                "description"=> ticket.description,
-                                                "worker_id"=> ticket.worker_id,
-                                                "state"=> ticket.state} }, :headers => HEADERS
-
-        delete '/tickets/1'
-          expect(response).to have_http_status(401)
       end
     end
   end

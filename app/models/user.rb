@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_one :worker
+  validates :email, presence:true
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -26,5 +27,9 @@ class User < ApplicationRecord
 
   def check_manager
     self.worker.role == "Manager"
+  end
+
+  def mail_after_create
+    UserMailer.with(user: self).welcome_email.deliver_later
   end
 end
