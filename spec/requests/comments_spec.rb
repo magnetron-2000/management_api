@@ -3,7 +3,6 @@ require './spec/support/helpers'
 
 RSpec.describe "Comments", type: :request do
   describe "GET /index" do
-    HEADERS = { "ACCEPT" => "application/json" }
     let!(:user) {create(:user)}
     let(:worker) {user.worker}
     let!(:ticket) {create(:ticket)}
@@ -65,10 +64,22 @@ RSpec.describe "Comments", type: :request do
     end
 
     it 'return a success creating' do
-      post "/tickets/1/comments", :params =>{ data: {
-                                              message: comment.message } }, :headers => HEADERS
+      post "/tickets/1/comments", :params =>{ data: { message: comment.message } }
       expect(response.content_type).to eq("application/json; charset=utf-8")
       expect(response).to have_http_status(:created)
+    end
+
+    it 'return a success update' do
+      patch "/tickets/1/comments/#{comment.id}", :params => { data: { message: "hi" } }
+      expect(response.content_type).to eq("application/json; charset=utf-8")
+      expect(response).to have_http_status(:ok)
+      #expect(Comment.find_by(id: comment.id).message).to eq("hi") #TODO ask mentor
+    end
+
+    it ' return a success delete' do
+      delete "/tickets/1/comments/#{comment.id}"
+      expect(response).to have_http_status(:ok)
+      #expect(Comment.find_by(id: comment.id).deleted).to eq(true)
     end
   end
 end

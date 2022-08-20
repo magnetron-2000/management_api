@@ -29,6 +29,9 @@ RSpec.describe Comment, type: :model do
     it "should have one ticket" do
       t = Comment.reflect_on_association(:ticket)
       expect(t.macro).to eq(:belongs_to)
-    end#TODO how to test self join table
+    end
+    it "should return true" do
+      expect(comment.check_time(1)).to be_truthy
+    end
   end
-end
+end#TODO how to test self join table

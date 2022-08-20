@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :comment do
     sequence :message do |n|
-      "hello world number #{n}"
+      "hello word number #{n}"
     end
     worker_id {1}
     ticket_id {1}
