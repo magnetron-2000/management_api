@@ -51,7 +51,7 @@ class CommentsController < ApplicationController
   end
 
   def new_params
-    params.require(:data).permit(:message)
+    params.require(:data).permit(:message, :reply_to_comment_id)
   end
 
   def is_deleted?
