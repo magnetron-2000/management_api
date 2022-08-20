@@ -8,12 +8,30 @@ RSpec.describe "Comments", type: :request do
     let(:worker) {user.worker}
     let!(:ticket) {create(:ticket)}
     let!(:comment) {create(:comment)}
+    let(:params) { {
+      "user": {
+        "email": "hello@mail.com",
+        "password": "secret",
+        "password_confirmation": "secret",
+        "worker_attributes": {
+          "first_name": "dffdfdfdfdfd",
+          "last_name": "Bradi",
+          "age": 30,
+          "role": "Developer" } } }
+    }
 
     before do
-      post '/users/sign_in', params: { "user": {
-                                        "email": "person1@mail.com",
-                                        "password": "secret",
-                                        "password_confirmation": "secret" } }
+      post '/users', params: params
+    end
+
+    it "index return a valid http status 200 " do
+      get'/tickets/1/comments'
+      expect(response).to have_http_status(200)
+    end
+
+    it "index return a valid http status 200" do
+      get'/tickets/333/comments'
+      expect(response).to have_http_status(200)
     end
 
     it "index return a valid json " do
@@ -26,6 +44,11 @@ RSpec.describe "Comments", type: :request do
                       )
     end
 
+    it "index return a valid json " do
+      get'/tickets/1111/comments'
+      expect(json_body).to eq([])
+    end
+
     it "show return a valid json" do
       get'/tickets/1/comments/1'
       expect(json_body).to eq(
@@ -34,6 +57,11 @@ RSpec.describe "Comments", type: :request do
                                "updated_at"=> comment.updated_at.strftime("%d/%m/%Y"),
                                "worker_id"=> comment.worker_id}
                            )
+    end
+
+    it "show return a valid http status 200 " do
+      get'/tickets/1/comments/1'
+      expect(response).to have_http_status(200)
     end
 
     it 'return a success creating' do

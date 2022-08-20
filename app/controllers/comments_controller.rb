@@ -5,7 +5,7 @@ class CommentsController < ApplicationController
 
 
   def index
-    render json: CommentBlueprint.render(Comment.all.includes(:ticket))
+    render json: CommentBlueprint.render(Comment.all.where :ticket_id => params[:ticket_id])
   end
 
   def show
@@ -21,6 +21,14 @@ class CommentsController < ApplicationController
     else
       render json: {errors: comment.errors.full_messages}, status: :expectation_failed
     end
+  end
+
+  def update
+
+  end
+
+  def destroy
+
   end
 
   private
