@@ -8,12 +8,30 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def check_update_time
+    unless @comment.check_time 6
+      render json: {errors: "time for updating expired"}, status: 410
+    end
+  end
+
+  def check_delete_time
+    unless @comment.check_time 1
+      render json: {errors: "time for deleting expired"}, status: 410
+    end
+  end
+
   def check_access_worker?
     check_access? @worker.id
   end
 
   def check_access_ticket?
     check_access? @ticket.creator_worker_id
+  end
+
+  def check_access_comment?
+    unless current_user.worker.id == @comment.worker_id
+      render json: {errors: "you have not access to delete this comment!"}
+    end
   end
 
   def check_access?(table)
