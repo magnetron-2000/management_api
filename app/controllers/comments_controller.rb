@@ -23,6 +23,9 @@ class CommentsController < ApplicationController
     comment.worker_id = current_user.worker.id
     if comment.save
       render json: CommentBlueprint.render(comment), status: :created
+      if comment.message =~ /(@\w{1,20})|(_\w{1,20})/
+        comment.mail_after_ping_person
+      end
     else
       render json: {errors: comment.errors.full_messages}, status: :expectation_failed
     end

@@ -8,4 +8,12 @@ class Comment < ApplicationRecord
   def check_time(hours)
     (self.created_at - DateTime.now).abs < hours * 3600
   end
+
+  def mail_after_ping_person
+    name = self.message[/(@\w{1,20})|(_\w{1,20})/][1..-1]
+    worker = (Worker.find_by last_name: name) || (Worker.find_by first_name: name)
+    if worker && worker.id != self.ticket.creator_worker_id
+      UserMailer.with(user: worker.user, comment: self).ping_person.deliver_later
+    end
+  end
 end

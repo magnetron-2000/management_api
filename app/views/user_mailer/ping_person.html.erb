@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Hello, <%= @user.email %></h1>
+<p>
+  You was mentioned in comment <%= @comment.ticket.title %>.
+</p>
+
+<p>
+  To see ticket, just follow this link: <%= @url1 %>.
+</p>
+<p>
+  To see comment, just follow this link: <%= @url2 %>.
+</p>
+<p>Have a great day!</p>
+</body>
+</html>
