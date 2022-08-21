@@ -47,6 +47,8 @@ RSpec.describe TicketsController do
 
       it 'return valid json' do
         get'/tickets'
+        comment_amount = 0
+        Comment.all.each {|comment| comment_amount += 1 if comment.ticket_id == ticket.id}
         body = JSON.parse(response.body)
         expect(body).to eq(
                           [{
@@ -56,7 +58,8 @@ RSpec.describe TicketsController do
                              "state"=> ticket.state,
                              "created_at" => ticket.created_at.strftime("%d/%m/%Y"),
                              "creator_worker_id" => ticket.creator_worker_id,
-                             "worker_id" => ticket.worker_id
+                             "worker_id" => ticket.worker_id,
+                             "comment_count"=> comment_amount
                           }]
                         )
       end
