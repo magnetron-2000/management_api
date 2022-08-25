@@ -39,6 +39,7 @@
     <orderEntry type="library" scope="PROVIDED" name="activerecord (v6.0.5, asdf: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activestorage (v6.0.5, asdf: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v6.0.5, asdf: 2.6.3) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="acts_as_paranoid (v0.8.1, asdf: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="addressable (v2.8.0, asdf: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bcrypt (v3.1.18, asdf: 2.6.3) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="bindex (v0.8.1, asdf: 2.6.3) [gem]" level="application" />
@@ -440,6 +441,7 @@
           <RakeTaskImpl id="spec">
             <subtasks>
               <RakeTaskImpl description="Run the code examples in spec/helpers" fullCommand="spec:helpers" id="helpers" />
+              <RakeTaskImpl description="Run the code examples in spec/mailers" fullCommand="spec:mailers" id="mailers" />
               <RakeTaskImpl description="Run the code examples in spec/models" fullCommand="spec:models" id="models" />
               <RakeTaskImpl description="Run the code examples in spec/requests" fullCommand="spec:requests" id="requests" />
               <RakeTaskImpl description="Run the code examples in spec/routing" fullCommand="spec:routing" id="routing" />

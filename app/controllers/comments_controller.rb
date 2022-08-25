@@ -2,7 +2,6 @@ class CommentsController < ApplicationController
   before_action :set_comment, except: [:index, :create]
   before_action :authenticate_user!
   before_action :is_active?
-  before_action :is_deleted?, except: [:create, :index]
   before_action :check_access_comment?, only: [:update, :destroy]
   before_action :check_update_time, only: [:update]
   before_action :check_delete_time, only: [:destroy]
@@ -40,8 +39,7 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment.deleted = true
-    if @comment.save
+    if @comment.destroy
       render json: {message: "#{@comment.message} deleted" }
     else
       render json: {errors: @comment.errors.full_messages}, status: :bad_request

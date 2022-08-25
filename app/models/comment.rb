@@ -1,4 +1,5 @@
 class Comment < ApplicationRecord
+  acts_as_paranoid column: 'deleted', column_type: 'boolean'
   belongs_to :ticket
   has_many :children, class_name: 'Comment', foreign_key: 'parent_id'
   belongs_to :parent, class_name: 'Comment', optional: true
