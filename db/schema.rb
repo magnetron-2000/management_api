@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_19_131609) do
+ActiveRecord::Schema.define(version: 2022_08_25_073029) do
 
   create_table "comments", force: :cascade do |t|
     t.text "message"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2022_08_19_131609) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "parent_id", default: 0
+    t.index ["deleted"], name: "index_comments_on_deleted"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|

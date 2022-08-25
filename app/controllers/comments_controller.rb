@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :find, except: [:index, :create]
+  before_action :set_comment, except: [:index, :create]
   before_action :authenticate_user!
   before_action :is_active?
   before_action :is_deleted?, except: [:create, :index]
@@ -49,7 +49,7 @@ class CommentsController < ApplicationController
   end
 
   private
-  def find
+  def set_comment
     @comment = Comment.find(params[:id])
   end
 

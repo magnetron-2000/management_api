@@ -24,6 +24,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'devise'
 gem 'devise-jwt'
 gem 'rack-cors'
+gem 'acts_as_paranoid'
 
 gem "blueprinter"
 # Use Active Storage variant

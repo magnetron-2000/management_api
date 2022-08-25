@@ -10,10 +10,10 @@
 </p>
 
 <p>
-  To see ticket, just follow this link: <%= @url1 %>.
+  To see ticket, just follow this link: <%= "http://localhost:3000/tickets/#{@comment.ticket_id}" %>.
 </p>
 <p>
-  To see comment, just follow this link: <%= @url2 %>.
+  To see comment, just follow this link: <%= "http://localhost:3000/tickets/#{@comment.ticket_id}/comments/#{@comment.id}" %>.
 </p>
 <p>Have a great day!</p>
 </body>

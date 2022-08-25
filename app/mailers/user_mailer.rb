@@ -25,8 +25,8 @@ class UserMailer < ApplicationMailer
   def ping_person
     @user = params[:user]
     @comment = params[:comment]
-    @url1  = "http://localhost:3000/tickets/#{@comment.ticket_id}"
-    @url2  = "http://localhost:3000/tickets/#{@comment.ticket_id}/comments/#{@comment.id}"
+    # @url1  = "http://localhost:3000/tickets/#{@comment.ticket_id}"
+    # @url2  = "http://localhost:3000/tickets/#{@comment.ticket_id}/comments/#{@comment.id}"
     mail(to: @user.email, subject: "You was mentioned in comment")
   end
 end
