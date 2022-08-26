@@ -4,6 +4,5 @@ FactoryBot.define do
     description {"new string"}
     worker_id {1}
     state {"Pending"}
-    #worker
   end
 end

@@ -8,6 +8,7 @@ class CommentsController < ApplicationController
 
 
 
+
   def index
     render json: CommentBlueprint.render(Comment.all.where :ticket_id => params[:ticket_id], :deleted => false)
   end
@@ -19,12 +20,9 @@ class CommentsController < ApplicationController
   def create
     comment = Comment.new(new_params)
     comment.ticket_id = params[:ticket_id] #TODO change permission
-    comment.worker_id = current_user.worker.id
+    comment.worker_id = current_worker.id
     if comment.save
       render json: CommentBlueprint.render(comment), status: :created
-      if comment.message =~ /(@\w{1,20})|(_\w{1,20})/
-        comment.mail_after_ping_person
-      end
     else
       render json: {errors: comment.errors.full_messages}, status: :expectation_failed
     end

@@ -30,8 +30,17 @@ RSpec.describe Comment, type: :model do
       t = Comment.reflect_on_association(:ticket)
       expect(t.macro).to eq(:belongs_to)
     end
-    it "should return true" do
-      expect(comment.check_time(1)).to be_truthy
+    context "check time" do
+      context "if hours more time existing comment" do
+        it "should return true " do
+          expect(comment.check_time(1)).to be_truthy
+        end
+      end
+      context "if hours less time existing comment" do
+        it "should return false " do
+          expect(comment.check_time(0.0000001)).to be_falsey
+        end
+      end
     end
   end
 end#TODO how to test self join table

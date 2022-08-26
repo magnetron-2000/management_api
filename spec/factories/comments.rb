@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence :message do |n|
       "hello word number #{n}"
     end
-    worker_id {1}
+    worker_id {1} #TODO does not work ask mentor
     ticket_id {1}
     reply_to_comment_id {nil}
       deleted {false}

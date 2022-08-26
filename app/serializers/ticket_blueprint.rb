@@ -5,12 +5,6 @@ class TicketBlueprint < Blueprinter::Base
     " #{ticket.worker.first_name} #{ticket.worker.last_name}"
   end
   field :comment_count do |ticket,options|
-    amount = 0
-    Comment.all.each do |comment|
-      if ticket.id == comment.ticket_id
-        amount += 1
-      end
-    end
-    amount
+    ticket.comments.count
   end
 end

@@ -10,10 +10,10 @@
 </p>
 
 <p>
-  To see ticket, just follow this link: <%= "http://localhost:3000/tickets/#{@comment.ticket_id}" %>.
+  To see ticket, just follow: <%= link_to 'this link', ticket_url(@comment.ticket_id, host: 'http://localhost:3000') %>.
 </p>
 <p>
-  To see comment, just follow this link: <%= "http://localhost:3000/tickets/#{@comment.ticket_id}/comments/#{@comment.id}" %>.
+  To see comment, just follow: <%= link_to 'this link', ticket_comment_url(@comment.ticket_id, @comment.id, host: "http://localhost:3000") %>.
 </p>
 <p>Have a great day!</p>
 </body>

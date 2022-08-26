@@ -50,6 +50,10 @@ class ApplicationController < ActionController::Base
     current_user.worker.role == "Manager"
   end
 
+  def current_worker
+    current_user.worker
+  end
+
   protected
   def get_user_from_token
     jwt_payload = JWT.decode(request.headers['Authorization'].split(' ')[1],

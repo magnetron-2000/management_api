@@ -47,8 +47,7 @@ RSpec.describe TicketsController do
 
       it 'return valid json' do
         get'/tickets'
-        comment_amount = 0
-        Comment.all.each {|comment| comment_amount += 1 if comment.ticket_id == ticket.id}
+        comment_amount = Comment.all.where(:ticket_id => ticket.id).count
         body = JSON.parse(response.body)
         expect(body).to eq(
                           [{
