@@ -1,6 +1,7 @@
 class Ticket< ApplicationRecord
   STATE = ["Pending", "In progress", "Done"]
   belongs_to :worker
+  has_many :comments
   validates :title,  length: {maximum: 40}
   validates :worker_id, presence: true
   validates :state, inclusion: { in: STATE, message: "invalid: state value" }

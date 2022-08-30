@@ -26,9 +26,8 @@ class WorkersController < ApplicationController
     render json: ["#{@worker.first_name} #{@worker.last_name} deleted"]
   end
 
-  def activate #TODO  use castom validation validates method
+  def activate
     if @worker.activate!
-      @worker.update(active: true)
       render json: ["#{@worker.first_name} #{@worker.last_name} activated"]
     else
       render json: {errors: ["#{@worker.first_name} #{@worker.last_name} already activated"]}

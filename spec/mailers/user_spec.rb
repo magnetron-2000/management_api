@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe UserMailer, type: :mailer do
   describe 'instructions' do
-    let(:user) { create(:user) }
-    let(:ticket) {create(:ticket)}
+    let!(:user) { create(:user) }
+    let!(:ticket) {create(:ticket)}
 
 
 
@@ -109,6 +109,41 @@ RSpec.describe UserMailer, type: :mailer do
 
       it 'assigns @url' do
         expect(task_changed_mail.body.encoded).to match("http://localhost:3000/tickets/#{ticket.id}")
+      end
+    end
+
+
+    context "ping person" do
+      let(:worker) {user.worker}
+      let!(:comment) {create(:comment, worker_id: worker.id, ticket_id: ticket.id)}
+      let(:ping_person_mail) { UserMailer.with(user: user, comment: comment).ping_person }
+
+      it 'renders the subject' do
+        expect(ping_person_mail.subject).to eql("You was mentioned in comment")
+      end
+
+      it 'renders the receiver email' do
+        expect(ping_person_mail.to).to eql([user.email])
+      end
+
+      it 'renders the sender email' do
+        expect(ping_person_mail.from).to eql(['danikfox1616@gmail.com'])
+      end
+
+      it 'assigns editor last name' do
+        expect(ping_person_mail.body.encoded).to match(user.email)
+      end
+
+      it 'assigns editor last name' do
+        expect(ping_person_mail.body.encoded).to match(comment.ticket.title)
+      end
+
+      it 'assigns @url1' do
+        expect(ping_person_mail.body.encoded).to match("http://localhost:3000/tickets/#{comment.ticket_id}")
+      end
+
+      it 'assigns @url2' do
+        expect(ping_person_mail.body.encoded).to match("http://localhost:3000/tickets/#{comment.ticket_id}/comments/#{comment.id}")
       end
 
     end

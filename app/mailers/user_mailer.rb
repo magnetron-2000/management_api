@@ -20,4 +20,11 @@ class UserMailer < ApplicationMailer
     @url  = "http://localhost:3000/tickets/#{@new_ticket.id}"
     mail(to: @user.email, subject: 'Your ticket has been changed')
   end
+
+
+  def ping_person
+    @user = params[:user]
+    @comment = params[:comment]
+    mail(to: @user.email, subject: "You was mentioned in comment")
+  end
 end

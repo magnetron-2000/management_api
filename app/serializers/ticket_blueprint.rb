@@ -4,4 +4,7 @@ class TicketBlueprint < Blueprinter::Base
   field :worker_name do |ticket,options|
     " #{ticket.worker.first_name} #{ticket.worker.last_name}"
   end
+  field :comment_count do |ticket,options|
+    ticket.comments.count
+  end
 end
