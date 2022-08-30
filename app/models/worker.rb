@@ -10,18 +10,14 @@ class Worker < ApplicationRecord
   validates :active, inclusion: {in: [true, false]}
 
   def activate!
-    active ? false : true
+    return false if active
+
+    update(active:true)
   end
 
   def deactivate!
-    flag = true
-    Ticket.all.each do |ticket|
-      if id == ticket.worker_id
-        flag = true if ticket.state.include?("Pending") || ticket.state.include?("In progress")
-      else
-        flag = false
-      end
-    end
-    flag
+    return true if Ticket.where(worker_id: id, state: "Pending").or(Ticket.where(worker_id: id, state: "In progress"))
+
+    false
   end
 end

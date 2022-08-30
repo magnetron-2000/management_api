@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
 
   def create
     comment = Comment.new(new_params)
-    comment.ticket_id = params[:ticket_id] #TODO change permission
+    comment.ticket_id = params[:ticket_id]
     comment.worker_id = current_worker.id
     if comment.save
       render json: CommentBlueprint.render(comment), status: :created

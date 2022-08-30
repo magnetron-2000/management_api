@@ -13,8 +13,7 @@ class Comment < ApplicationRecord
 
   def mail_after_ping_person
     name = self.message[/(@\w{1,20})|(_\w{1,20})/][1..-1]
-    # worker = Worker.where(last_name: name).or(Worker.where(first_name: name)) #TODO where don't work ask mentor
-    worker = (Worker.find_by last_name: name) || (Worker.find_by first_name: name)
+    worker = Worker.where(last_name: name).or(Worker.where(first_name: name)).first
     UserMailer.with(user: worker.user, comment: self).ping_person.deliver_later if worker && worker.id != self.ticket.creator_worker_id
   end
 

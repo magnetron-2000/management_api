@@ -114,7 +114,8 @@ RSpec.describe UserMailer, type: :mailer do
 
 
     context "ping person" do
-      let(:comment) {create(:comment)}
+      let(:worker) {user.worker}
+      let!(:comment) {create(:comment, worker_id: worker.id, ticket_id: ticket.id)}
       let(:ping_person_mail) { UserMailer.with(user: user, comment: comment).ping_person }
 
       it 'renders the subject' do

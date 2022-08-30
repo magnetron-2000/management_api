@@ -6,22 +6,15 @@ RSpec.describe "Comments", type: :request do
     let!(:user) {create(:user)}
     let(:worker) {user.worker}
     let!(:ticket) {create(:ticket)}
-    let!(:comment) {create(:comment)}
-    let(:get_request) { get '/tickets/333/comments' }
-    let(:params) { {
-      "user": {
-        "email": "hello@mail.com",
-        "password": "secret",
-        "password_confirmation": "secret",
-        "worker_attributes": {
-          "first_name": "dffdfdfdfdfd",
-          "last_name": "Bradi",
-          "age": 30,
-          "role": "Developer" } } }
-    }
+    let!(:comment) {create(:comment, worker_id: worker.id, ticket_id: ticket.id)}
+    let(:get_request) { get '/tickets/0/comments' }
+    let(:params) { { "user": {
+      "email": user.email,
+      "password": user.password,
+      "password_confirmation": user.password_confirmation } } }
 
     before do # sign up user for for validation
-      post '/users', params: params
+      post '/users/sign_in', params: params
     end
     context "get #index" do
       it "index return a valid http status 200 " do
@@ -78,18 +71,19 @@ RSpec.describe "Comments", type: :request do
 
     context "patch #update" do
       it 'return a success update' do
-        patch "/tickets/1/comments/#{comment.id}", :params => { data: { message: "hi" } }
-        expect(response.content_type).to eq("application/json; charset=utf-8")
+        patch "/tickets/#{ticket.id}/comments/#{comment.id}", :params => { data: { message: "hihi" } }
+
         expect(response).to have_http_status(:ok)
-        #expect(Comment.find_by(id: comment.id).message).to eq("hi") #TODO ask mentor
+        expect(Comment.find_by(id: comment.id).message).to eq("hihi")
       end
     end
 
     context "delete #destroy" do
       it ' return a success delete' do
-        delete "/tickets/1/comments/#{comment.id}"
+        delete "/tickets/#{ticket.id}/comments/#{comment.id}"
+
         expect(response).to have_http_status(:ok)
-        #expect(Comment.find_by(id: comment.id).deleted).to eq(true)
+        expect(Comment.with_deleted.find_by(id: comment.id).deleted).to eq(true)
       end
     end
   end
