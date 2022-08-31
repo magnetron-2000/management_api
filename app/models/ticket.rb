@@ -1,5 +1,5 @@
 class Ticket< ApplicationRecord
-  STATE = ["Pending", "In progress", "Done"]
+  STATE = ['Backlog', 'Pending', 'In Progress', 'Waiting For Accept', 'Declined', 'Accepted', 'Done']
   belongs_to :worker
   has_many :comments
   validates :title,  length: {maximum: 40}

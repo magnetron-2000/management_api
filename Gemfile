@@ -25,6 +25,7 @@ gem 'devise'
 gem 'devise-jwt'
 gem 'rack-cors'
 gem 'acts_as_paranoid'
+gem 'state_machines'
 
 gem "blueprinter"
 # Use Active Storage variant
