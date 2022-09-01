@@ -26,5 +26,12 @@ RSpec.describe Ticket, type: :model do
       t = Ticket.reflect_on_association(:worker)
       expect(t.macro).to eq(:belongs_to)
     end
+
+    context "state machine" do
+      it { is_expected.to handle_events :to_pending }
+
+      it { is_expected.to transition_from :backlog, to_state: :pending,
+                                          on_event: :to_pending }
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_175005) do
+ActiveRecord::Schema.define(version: 2022_09_01_115755) do
 
   create_table "comments", force: :cascade do |t|
     t.text "message"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2022_08_31_175005) do
     t.string "title"
     t.text "description"
     t.integer "worker_id"
-    t.text "state", default: "Backlog"
+    t.string "state"
     t.date "created_at"
     t.integer "creator_worker_id"
   end

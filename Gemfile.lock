@@ -183,6 +183,10 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
+    rspec (3.11.0)
+      rspec-core (~> 3.11.0)
+      rspec-expectations (~> 3.11.0)
+      rspec-mocks (~> 3.11.0)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
     rspec-expectations (3.11.0)
@@ -228,6 +232,16 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.4.4)
     state_machines (0.5.0)
+    state_machines-activemodel (0.8.0)
+      activemodel (>= 5.1)
+      state_machines (>= 0.5.0)
+    state_machines-activerecord (0.8.0)
+      activerecord (>= 5.1)
+      state_machines-activemodel (>= 0.8.0)
+    state_machines-rspec (0.6.0)
+      activesupport
+      rspec (~> 3.3)
+      state_machines
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -288,6 +302,8 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4)
   state_machines
+  state_machines-activerecord
+  state_machines-rspec
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)

@@ -1,5 +1,12 @@
 class Ticket< ApplicationRecord
-  STATE = ['Backlog', 'Pending', 'In Progress', 'Waiting For Accept', 'Declined', 'Accepted', 'Done']
+  # STATE = ['Backlog', 'Pending', 'In Progress', 'Waiting For Accept', 'Declined', 'Accepted', 'Done']
+
+  state_machine :state, initial: :backlog do
+    event :to_pending do
+      transition backlog: :pending
+    end
+  end
+
   belongs_to :worker
   has_many :comments
   validates :title,  length: {maximum: 40}
