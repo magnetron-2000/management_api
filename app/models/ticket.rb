@@ -1,9 +1,23 @@
 class Ticket< ApplicationRecord
-  # STATE = ['Backlog', 'Pending', 'In Progress', 'Waiting For Accept', 'Declined', 'Accepted', 'Done']
-
   state_machine :state, initial: :backlog do
-    event :to_pending do
-      transition backlog: :pending
+    event :move_up do
+      transition backlog: :pending, pending: :in_progress, in_progress: :waiting_for_accept
+    end
+
+    event :decline do
+      transition waiting_for_accept: :declined
+    end
+
+    event :accept do
+      transition waiting_for_accept: :accepted
+    end
+
+    event :processing do
+      transition declined: :in_progress
+    end
+
+    event :finish do
+      transition accepted: :done
     end
   end
 
@@ -11,7 +25,6 @@ class Ticket< ApplicationRecord
   has_many :comments
   validates :title,  length: {maximum: 40}
   validates :worker_id, presence: true
-  validates :state, inclusion: { in: STATE, message: "invalid: state value" }
 
   def mail_after_update(user)
     UserMailer.with(user: self.worker.user, editor: user.worker, old_ticket: self, new_ticket: self).task_changed.deliver_later

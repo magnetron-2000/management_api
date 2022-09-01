@@ -28,10 +28,14 @@ RSpec.describe Ticket, type: :model do
     end
 
     context "state machine" do
-      it { is_expected.to handle_events :to_pending }
-
-      it { is_expected.to transition_from :backlog, to_state: :pending,
-                                          on_event: :to_pending }
+      it { is_expected.to handle_events :move_up, when: :backlog }
+      it { is_expected.to handle_events :move_up, when: :pending }
+      it { is_expected.to handle_events :move_up, when: :in_progress }
+      it { is_expected.to handle_events :decline, when: :waiting_for_accept }
+      it { is_expected.to handle_events :accept, when: :waiting_for_accept }
+      it { is_expected.to handle_events :processing, when: :declined }
+      it { is_expected.to handle_events :finish, when: :accepted }
+      it { is_expected.to reject_events :finish, when: :done }
     end
   end
 end

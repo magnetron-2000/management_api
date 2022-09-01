@@ -3,6 +3,6 @@ FactoryBot.define do
     title {"string"}
     description {"new string"}
     worker_id {1}
-    state {"Pending"}
+    state {:backlog}
   end
 end
