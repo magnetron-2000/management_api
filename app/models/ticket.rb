@@ -8,6 +8,10 @@ class Ticket< ApplicationRecord
       transition waiting_for_accept: :declined
     end
 
+    event :to_progress do
+      transition declined: :in_progress
+    end
+
     event :accept do
       transition waiting_for_accept: :accepted
     end
@@ -32,9 +36,5 @@ class Ticket< ApplicationRecord
 
   def mail_after_change_worker
     UserMailer.with(user: self.worker.user, ticket: self).assigned_new_task.deliver_later
-  end
-
-  def state_can_be_change_by?(user)
-    user.is_admin || user.worker.role == "Manager" || user.worker.id == self.worker_id
   end
 end
