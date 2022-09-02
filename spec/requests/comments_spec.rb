@@ -5,7 +5,7 @@ RSpec.describe "Comments", type: :request do
   describe "GET /index" do
     let!(:user) {create(:user)}
     let(:worker) {user.worker}
-    let!(:ticket) {create(:ticket)}
+    let!(:ticket) {create(:ticket, worker_id: worker.id)}
     let!(:comment) {create(:comment, worker_id: worker.id, ticket_id: ticket.id)}
     let(:get_request) { get '/tickets/0/comments' }
     let(:params) { { "user": {
@@ -13,7 +13,7 @@ RSpec.describe "Comments", type: :request do
       "password": user.password,
       "password_confirmation": user.password_confirmation } } }
 
-    before do # sign up user for for validation
+    before do # sign in user for validation
       post '/users/sign_in', params: params
     end
     context "get #index" do

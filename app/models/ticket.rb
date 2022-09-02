@@ -1,23 +1,19 @@
 class Ticket< ApplicationRecord
   state_machine :state, initial: :backlog do
-    event :move_up do
+    event :move_up do # change ticket state for developers
       transition backlog: :pending, pending: :in_progress, in_progress: :waiting_for_accept
-    end
-
-    event :decline do
-      transition waiting_for_accept: :declined
     end
 
     event :to_progress do
       transition declined: :in_progress
     end
 
-    event :accept do
-      transition waiting_for_accept: :accepted
+    event :decline do  # change ticket state for manager
+      transition waiting_for_accept: :declined
     end
 
-    event :processing do
-      transition declined: :in_progress
+    event :accept do
+      transition waiting_for_accept: :accepted
     end
 
     event :finish do

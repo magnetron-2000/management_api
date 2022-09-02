@@ -2,7 +2,7 @@ class TicketsController < ApplicationController
   before_action :find, except: [:index, :create]
   before_action :authenticate_user!
   before_action :is_active?
-  before_action :check_access_ticket?, except: [:index, :show, :create, :dev_state, :decline, :accept, :done]
+  before_action :check_access_ticket?, except: [:index, :show, :create, :dev_state, :to_progress, :decline, :accept, :done]
   before_action :check_developer, only: [:dev_state, :to_progress]
   before_action :check_manager, only: [:decline, :accept, :done]
   def index

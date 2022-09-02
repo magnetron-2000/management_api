@@ -3,7 +3,8 @@ require "rails_helper"
 RSpec.describe UserMailer, type: :mailer do
   describe 'instructions' do
     let!(:user) { create(:user) }
-    let!(:ticket) {create(:ticket)}
+    let!(:worker) {user.worker}
+    let!(:ticket) {create(:ticket, worker_id: worker.id)}
 
 
 
