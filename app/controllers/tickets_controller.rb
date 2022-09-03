@@ -41,6 +41,8 @@ class TicketsController < ApplicationController
 
   def dev_state # change ticket state for developers
     state(@ticket.move_up!, @ticket.can_move_up?) if @ticket.can_move_up?
+    notification("pending")
+    @ticket.notify_manager if @ticket.state == "waiting_for_accept"
   end
 
   def to_progress
@@ -48,15 +50,18 @@ class TicketsController < ApplicationController
   end
 
   def decline # change ticket state for manager
-      state(@ticket.decline!, @ticket.can_decline?) if @ticket.can_decline?
+    state(@ticket.decline!, @ticket.can_decline?) if @ticket.can_decline?
+    notification("declined")
   end
 
   def accept
     state(@ticket.accept!, @ticket.can_accept?) if @ticket.can_accept?
+    notification("accepted")
   end
 
   def done
     state(@ticket.finish!, @ticket.can_finish?) if @ticket.can_finish?
+    notification("done")
   end
 
   def change_worker # change ticket worker
@@ -91,9 +96,8 @@ class TicketsController < ApplicationController
     end
   end
 
-
   def check_developer
-    unless current_user.worker.role == "Developer" && current_user.worker.id == @ticket.worker_id
+    unless current_user.worker.role == "Developer"
       no_access
     end
   end
@@ -106,5 +110,9 @@ class TicketsController < ApplicationController
   def no_access
     render json: {message: "you have not access!"}, status: 401
     false
+  end
+
+  def notification(state)
+    @ticket.notify_worker if @ticket.worker_id && @ticket.state == state
   end
 end

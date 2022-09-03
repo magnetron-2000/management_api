@@ -33,4 +33,13 @@ class Ticket< ApplicationRecord
   def mail_after_change_worker
     UserMailer.with(user: self.worker.user, ticket: self).assigned_new_task.deliver_later
   end
+
+  def notify_worker
+    UserMailer.with(user: self.worker.user, ticket: self).notify_about_state.deliver_later
+  end
+
+  def notify_manager
+    workers = Worker.where(role: "Manager")
+    workers.each {|worker| UserMailer.with(user: worker.user, ticket: self).notify_about_state.deliver_later }
+  end
 end
