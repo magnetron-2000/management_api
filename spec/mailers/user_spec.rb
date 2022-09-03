@@ -146,7 +146,38 @@ RSpec.describe UserMailer, type: :mailer do
       it 'assigns @url2' do
         expect(ping_person_mail.body.encoded).to match("http://localhost:3000/tickets/#{comment.ticket_id}/comments/#{comment.id}")
       end
+    end
 
+    context "notify_about_state" do
+      let(:notify_about_state) { UserMailer.with(user: ticket.worker.user, ticket: ticket ).notify_about_state }
+
+      it 'renders the subject' do
+        expect(notify_about_state.subject).to eql("ticket state is #{ticket.state}")
+      end
+
+      it 'renders the receiver email' do
+        expect(notify_about_state.to).to eql([user.email])
+      end
+
+      it 'renders the sender email' do
+        expect(notify_about_state.from).to eql(['danikfox1616@gmail.com'])
+      end
+
+      it 'should be user email' do
+        expect(notify_about_state.body.encoded).to match(user.email)
+      end
+
+      it 'should be ticket title' do
+        expect(notify_about_state.body.encoded).to match(ticket.title)
+      end
+
+      it 'should be ticket state' do
+        expect(notify_about_state.body.encoded).to match(ticket.state)
+      end
+
+      it 'should be url' do
+        expect(notify_about_state.body.encoded).to match("http://localhost:3000/tickets/#{ticket.id}")
+      end
     end
   end
 end
