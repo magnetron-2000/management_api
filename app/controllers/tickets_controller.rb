@@ -3,8 +3,8 @@ class TicketsController < ApplicationController
   before_action :authenticate_user!
   before_action :is_active?
   before_action :check_access_ticket?, except: [:index, :show, :create, :dev_state, :to_progress, :decline, :accept, :done]
-  before_action :check_developer, only: [:dev_state, :to_progress]
-  before_action :check_manager, only: [:decline, :accept, :done]
+  # before_action :check_developer, only: [:dev_state, :to_progress]
+  # before_action :check_manager, only: [:decline, :accept, :done]
   def index
     render json: TicketBlueprint.render(Ticket.all)
   end
@@ -40,22 +40,27 @@ class TicketsController < ApplicationController
   end
 
   def dev_state # change ticket state for developers
+    authorize @ticket, :check_developer?
     update_state(@ticket.move_up!) if @ticket.can_move_up?
   end
 
   def to_progress
+    authorize @ticket, :check_developer?
     update_state(@ticket.to_progress!) if @ticket.can_to_progress?
   end
 
   def decline # change ticket state for manager
+    authorize @ticket, :check_manager?
     update_state(@ticket.decline!) if @ticket.can_decline?
   end
 
   def accept
+    authorize @ticket, :check_manager?
     update_state(@ticket.accept!) if @ticket.can_accept?
   end
 
   def done
+    authorize @ticket, :check_manager?
     update_state(@ticket.finish!) if @ticket.can_finish?
   end
 
@@ -91,19 +96,16 @@ class TicketsController < ApplicationController
     end
   end
 
-  def check_developer
-    unless current_user.worker.role == "Developer"
-      no_access
-    end
-  end
-
-  def check_manager
-    return true if current_user.worker.role == "Manager"
-    no_access
-  end
-
-  def no_access
-    render json: {message: "you have not access!"}, status: 401
-    false
-  end
+  # def check_developer
+  #   no_access
+  # end
+  #
+  # def check_manager
+  #   no_access
+  # end
+  #
+  # def no_access
+  #   render json: {message: "you have not access!"}, status: 401
+  #   false
+  # end
 end

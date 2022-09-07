@@ -27,6 +27,7 @@ gem 'rack-cors'
 gem 'acts_as_paranoid'
 gem 'state_machines'
 gem 'state_machines-activerecord'
+gem 'pundit'
 
 gem "blueprinter"
 # Use Active Storage variant
