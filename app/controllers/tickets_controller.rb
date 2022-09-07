@@ -40,23 +40,23 @@ class TicketsController < ApplicationController
   end
 
   def dev_state # change ticket state for developers
-    update_state(@ticket.move_up!, @ticket.can_move_up?) if @ticket.can_move_up?
+    update_state(@ticket.move_up!) if @ticket.can_move_up?
   end
 
   def to_progress
-    update_state(@ticket.to_progress!, @ticket.can_to_progress?) if @ticket.can_to_progress?
+    update_state(@ticket.to_progress!) if @ticket.can_to_progress?
   end
 
   def decline # change ticket state for manager
-    update_state(@ticket.decline!, @ticket.can_decline?) if @ticket.can_decline?
+    update_state(@ticket.decline!) if @ticket.can_decline?
   end
 
   def accept
-    update_state(@ticket.accept!, @ticket.can_accept?) if @ticket.can_accept?
+    update_state(@ticket.accept!) if @ticket.can_accept?
   end
 
   def done
-    update_state(@ticket.finish!, @ticket.can_finish?) if @ticket.can_finish?
+    update_state(@ticket.finish!) if @ticket.can_finish?
   end
 
   def change_worker # change ticket worker
@@ -82,11 +82,11 @@ class TicketsController < ApplicationController
     params.require(:data).permit(:title, :description)
   end
 
-  def update_state(state_method, can_change_state)
+  def update_state(state_method)
     if state_method
       render json: TicketBlueprint.render(@ticket)
     else
-      render json: {errors: @ticket.errors.full_messages, can_change_state: can_change_state}
+      render json: {errors: @ticket.errors.full_messages}
       false
     end
   end
