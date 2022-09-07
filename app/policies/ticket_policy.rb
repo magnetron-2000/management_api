@@ -1,9 +1,18 @@
 class TicketPolicy < ApplicationPolicy
   def check_developer?
-    user.worker.role == "Developer"
+    developer?
   end
 
   def check_manager?
+    manager?
+  end
+
+  private
+
+  def developer?
+    user.worker.role == "Developer"
+  end
+  def manager?
     user.worker.role == "Manager"
   end
 end

@@ -3,8 +3,6 @@ class TicketsController < ApplicationController
   before_action :authenticate_user!
   before_action :is_active?
   before_action :check_access_ticket?, except: [:index, :show, :create, :dev_state, :to_progress, :decline, :accept, :done]
-  # before_action :check_developer, only: [:dev_state, :to_progress]
-  # before_action :check_manager, only: [:decline, :accept, :done]
   def index
     render json: TicketBlueprint.render(Ticket.all)
   end
@@ -95,17 +93,4 @@ class TicketsController < ApplicationController
       false
     end
   end
-
-  # def check_developer
-  #   no_access
-  # end
-  #
-  # def check_manager
-  #   no_access
-  # end
-  #
-  # def no_access
-  #   render json: {message: "you have not access!"}, status: 401
-  #   false
-  # end
 end
