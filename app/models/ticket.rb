@@ -1,5 +1,20 @@
 class Ticket< ApplicationRecord
   state_machine :state, initial: :backlog do
+    after_transition to: :pending do |ticket, transition|
+      ticket.notify_worker if ticket.worker_id && ticket.state == "pending"
+    end
+    after_transition to: :declined do |ticket, transition|
+      ticket.notify_worker if ticket.worker_id && ticket.state == "declined"
+    end
+    after_transition to: :accepted do |ticket, transition|
+      ticket.notify_worker if ticket.worker_id && ticket.state == "accepted"
+    end
+    after_transition to: :done do |ticket, transition|
+      ticket.notify_worker if ticket.worker_id && ticket.state == "done"
+    end
+    after_transition to: :waiting_for_accept do |ticket, transition|
+      ticket.notify_manager if ticket.state == "waiting_for_accept"
+    end
     event :move_up do # change ticket state for developers
       transition backlog: :pending, pending: :in_progress, in_progress: :waiting_for_accept
     end
