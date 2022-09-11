@@ -27,4 +27,10 @@ class UserMailer < ApplicationMailer
     @comment = params[:comment]
     mail(to: @user.email, subject: "You was mentioned in comment")
   end
+
+  def notify_about_state
+    @ticket = params[:ticket]
+    @user = params[:user]
+    mail(to: @user.email, subject: "ticket state is #{@ticket.state}")
+  end
 end

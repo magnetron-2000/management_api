@@ -25,6 +25,9 @@ gem 'devise'
 gem 'devise-jwt'
 gem 'rack-cors'
 gem 'acts_as_paranoid'
+gem 'state_machines'
+gem 'state_machines-activerecord'
+gem 'pundit'
 
 gem "blueprinter"
 # Use Active Storage variant
@@ -39,7 +42,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot_rails'
   gem 'dotenv-rails'
-
+  gem 'state_machines-rspec'
 end
 
 group :development do

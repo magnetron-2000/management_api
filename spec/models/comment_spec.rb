@@ -4,7 +4,7 @@ RSpec.describe Comment, type: :model do
   describe "validations" do
     let!(:user) {create(:user)}
     let(:worker) {user.worker}
-    let!(:ticket) {create(:ticket)}
+    let!(:ticket) {create(:ticket, worker_id: worker.id)}
     let!(:comment) {create(:comment, worker_id: worker.id, ticket_id: ticket.id)}
 
 

@@ -140,6 +140,8 @@ GEM
     public_suffix (4.0.7)
     puma (4.3.12)
       nio4r (~> 2.0)
+    pundit (2.2.0)
+      activesupport (>= 3.0.0)
     racc (1.6.0)
     rack (2.2.4)
     rack-cors (1.1.1)
@@ -183,6 +185,10 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
+    rspec (3.11.0)
+      rspec-core (~> 3.11.0)
+      rspec-expectations (~> 3.11.0)
+      rspec-mocks (~> 3.11.0)
     rspec-core (3.11.0)
       rspec-support (~> 3.11.0)
     rspec-expectations (3.11.0)
@@ -227,6 +233,17 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.4)
+    state_machines (0.5.0)
+    state_machines-activemodel (0.8.0)
+      activemodel (>= 5.1)
+      state_machines (>= 0.5.0)
+    state_machines-activerecord (0.8.0)
+      activerecord (>= 5.1)
+      state_machines-activemodel (>= 0.8.0)
+    state_machines-rspec (0.6.0)
+      activesupport
+      rspec (~> 3.3)
+      state_machines
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -278,6 +295,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   listen (~> 3.2)
   puma (~> 4.1)
+  pundit
   rack-cors
   rails (~> 6.0.5)
   rspec-rails
@@ -286,6 +304,9 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4)
+  state_machines
+  state_machines-activerecord
+  state_machines-rspec
   turbolinks (~> 5)
   tzinfo-data
   web-console (>= 3.3.0)
